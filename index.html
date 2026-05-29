@@ -11,117 +11,105 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <style>
-:root{--bg:#050a12;--surf:#0a1525;--surf2:#0f1e35;--border:#1a3a5c;--accent:#00d4ff;--green:#00ff88;--orange:#ff6b35;--text:#c8dff0;--dim:#4a7a9b}
+:root{--bg:#050a12;--surf:#0a1525;--surf2:#0f1e35;--bor:#1a3a5c;--ac:#00d4ff;--gn:#00ff88;--or:#ff6b35;--tx:#c8dff0;--dm:#4a7a9b}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%}
-body{height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow:hidden}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif}
 #app{display:flex;flex-direction:column;height:100vh;height:100dvh}
-
-#hdr{flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
-.lname{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--accent);letter-spacing:2px}
-.lsub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dim)}
+/* HEADER */
+#hdr{flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--bor);padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.lname{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--ac);letter-spacing:2px}
+.lsub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--dm)}
 .logo{display:flex;align-items:center;gap:8px}
-.lico{width:30px;height:30px;border:1px solid var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;animation:gl 3s ease-in-out infinite}
+.lico{width:30px;height:30px;border:1px solid var(--ac);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;animation:gl 3s ease-in-out infinite}
 @keyframes gl{0%,100%{box-shadow:0 0 6px rgba(0,212,255,.3)}50%{box-shadow:0 0 18px rgba(0,212,255,.7)}}
-.live{display:flex;align-items:center;gap:5px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);border-radius:20px;padding:4px 10px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--green)}
-.ldot{width:6px;height:6px;background:var(--green);border-radius:50%;animation:blink 1.2s infinite}
+.live{display:flex;align-items:center;gap:5px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.3);border-radius:20px;padding:4px 10px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--gn)}
+.ldot{width:6px;height:6px;background:var(--gn);border-radius:50%;animation:blink 1.2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-#clk{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);margin-left:6px}
-
-#tabs{flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--border);display:flex;gap:2px;padding:5px 8px;overflow-x:auto;scrollbar-width:none}
+#clk{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-left:6px}
+/* TABS */
+#tabs{flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--bor);display:flex;gap:2px;padding:5px 8px;overflow-x:auto;scrollbar-width:none}
 #tabs::-webkit-scrollbar{display:none}
-.tab{background:transparent;border:1px solid transparent;color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;padding:5px 11px;border-radius:4px;cursor:pointer;white-space:nowrap;transition:all .2s}
-.tab:hover{color:var(--text);border-color:var(--border)}
-.tab.on{background:rgba(0,212,255,.1);border-color:var(--accent);color:var(--accent)}
-
-/* MAP — THIS IS THE KEY FIX: explicit px height calculated after header+tabs+sb+bnav */
+.tab{background:transparent;border:1px solid transparent;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;border-radius:4px;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab.on{background:rgba(0,212,255,.1);border-color:var(--ac);color:var(--ac)}
+/* MAP */
 #mapwrap{position:relative;flex:1;min-height:0}
 #map{position:absolute;inset:0;width:100%;height:100%}
-
-#sb{flex-shrink:0;background:var(--surf);border-top:1px solid var(--border);padding:5px 10px;display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim);overflow:hidden}
-#sb .v{color:var(--accent)}
-.sp{color:var(--border)}
-
-#bnav{flex-shrink:0;background:var(--surf);border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
-.bnb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:600;padding:5px 0;cursor:pointer}
-.bnb:hover,.bnb.on{color:var(--accent)}
-.bnb .ic{font-size:18px;line-height:1.2}
-
-/* FABs */
-#fabs{position:absolute;right:10px;bottom:14px;z-index:500;display:flex;flex-direction:column;gap:7px}
-.fab{width:40px;height:40px;background:rgba(5,10,18,.9);border:1px solid var(--border);border-radius:8px;color:var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 4px 14px rgba(0,0,0,.6);transition:all .2s}
-.fab:hover,.fab.on{border-color:var(--accent);box-shadow:0 0 10px rgba(0,212,255,.3)}
-
 /* CROSSHAIR */
 #ch{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:400;width:34px;height:34px}
 #ch::before,#ch::after{content:'';position:absolute;background:rgba(0,212,255,.7)}
 #ch::before{top:50%;left:0;right:0;height:1px;transform:translateY(-50%)}
 #ch::after{left:50%;top:0;bottom:0;width:1px;transform:translateX(-50%)}
-.chdot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;background:var(--accent);border-radius:50%;box-shadow:0 0 6px var(--accent)}
+.chdot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;background:var(--ac);border-radius:50%;box-shadow:0 0 6px var(--ac)}
+/* FABS */
+#fabs{position:absolute;right:10px;top:10px;z-index:500;display:flex;flex-direction:column;gap:6px}
+.fab{width:40px;height:40px;background:rgba(5,10,18,.92);border:1px solid var(--bor);border-radius:8px;color:var(--ac);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 4px 14px rgba(0,0,0,.6);transition:all .2s}
+.fab:hover,.fab.on{border-color:var(--ac);box-shadow:0 0 10px rgba(0,212,255,.3)}
+/* STATUS BAR */
+#sb{flex-shrink:0;background:var(--surf);border-top:1px solid var(--bor);padding:5px 10px;display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);overflow:hidden}
+#sb .v{color:var(--ac)}
+.sp{color:var(--bor)}
+/* BOTTOM NAV */
+#bnav{flex-shrink:0;background:var(--surf);border-top:1px solid var(--bor);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
+.bnb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:600;padding:5px 0;cursor:pointer}
+.bnb:hover,.bnb.on{color:var(--ac)}
+.bnb .ic{font-size:18px;line-height:1.2}
 
-/* DRAWER */
-#drawer{position:fixed;bottom:0;left:0;right:0;max-height:72%;background:var(--surf);border-top:1px solid var(--border);border-radius:14px 14px 0 0;z-index:800;transform:translateY(100%);transition:transform .28s ease;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-#drawer.open{transform:translateY(0)}
-.dh{width:36px;height:4px;background:var(--border);border-radius:2px;margin:10px auto 0}
-#dbody{padding:12px 16px 32px}
-.dtitle{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--accent);margin:12px 0 12px}
-.flabel{font-size:10px;color:var(--dim);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:block}
-.fi{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;padding:8px 10px;outline:none;-webkit-appearance:none;appearance:none}
-.fi:focus{border-color:var(--accent)}
-.fi::placeholder{color:var(--dim)}
-.frow{display:flex;gap:6px;margin-top:6px}
-.frow .fi{flex:1}
-.gobtn{width:100%;margin-top:8px;background:rgba(0,212,255,.08);border:1px solid var(--accent);border-radius:5px;color:var(--accent);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:10px;cursor:pointer;-webkit-appearance:none}
-.ibtn{background:var(--surf2);border:1px solid var(--border);border-radius:5px;color:var(--accent);cursor:pointer;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.divider{height:1px;background:var(--border);margin:12px 0;opacity:.4}
-.sbadge{background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);border-radius:10px;padding:1px 7px;font-size:9px;color:var(--accent);font-family:'Share Tech Mono',monospace}
-
-/* SOURCE LINKS */
-.slink{display:flex;align-items:center;gap:8px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;padding:10px 12px;text-decoration:none;transition:all .2s;margin-bottom:6px;width:100%}
-.slink-b{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:var(--accent)}
-.slink-g{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);color:var(--green)}
-.slink-o{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.2);color:var(--orange)}
-.slink-b:hover{background:rgba(0,212,255,.14);border-color:var(--accent)}
-.slink-g:hover{background:rgba(0,255,136,.14);border-color:var(--green)}
-.slink-o:hover{background:rgba(255,107,53,.14);border-color:var(--orange)}
-
+/* PANELS - slide up from bottom */
+.panel{position:fixed;bottom:0;left:0;right:0;max-height:80%;background:var(--surf);border-top:1px solid var(--bor);border-radius:14px 14px 0 0;z-index:800;transform:translateY(100%);transition:transform .28s ease;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:none}
+.panel.open{transform:translateY(0);display:block}
+.panel-handle{width:36px;height:4px;background:var(--bor);border-radius:2px;margin:10px auto 0}
+.panel-body{padding:12px 16px 40px}
+.panel-title{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--ac);margin:12px 0 14px;display:flex;align-items:center;justify-content:space-between}
+.panel-close{background:transparent;border:1px solid var(--bor);border-radius:4px;color:var(--dm);font-size:14px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+/* INPUTS */
+.fi{width:100%;background:var(--bg);border:1px solid var(--bor);border-radius:5px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;appearance:none;margin-bottom:8px}
+.fi:focus{border-color:var(--ac)}
+.fi::placeholder{color:var(--dm)}
+.flabel{font-size:10px;color:var(--dm);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
+.frow{display:flex;gap:6px}
+.frow .fi{flex:1;margin-bottom:0}
+.ibtn{background:var(--surf2);border:1px solid var(--bor);border-radius:5px;color:var(--ac);cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.btn-primary{width:100%;margin-top:10px;background:rgba(0,212,255,.08);border:1px solid var(--ac);border-radius:6px;color:var(--ac);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:11px;cursor:pointer;-webkit-appearance:none}
+.btn-green{width:100%;margin-top:8px;background:rgba(0,255,136,.08);border:1px solid var(--gn);border-radius:6px;color:var(--gn);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:11px;cursor:pointer;-webkit-appearance:none}
+.divider{height:1px;background:var(--bor);margin:14px 0;opacity:.4}
 /* PROPERTY CARDS */
-.pcard{background:var(--bg);border:1px solid var(--border);border-left:3px solid transparent;border-radius:6px;padding:10px 12px;margin-bottom:7px;cursor:pointer;transition:border-color .15s}
-.pcard:hover{border-color:var(--green);border-left-color:var(--green)}
-.pname{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
-.pcoord{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dim)}
-.pbtns{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
-.pbtn{background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer;-webkit-appearance:none}
-.pbtn:hover{border-color:var(--accent);color:var(--accent)}
-.pbtn.del:hover{border-color:#f44;color:#f44}
-.hint{font-size:12px;color:var(--dim);line-height:1.8;text-align:center;padding:20px 0}
-
+.pcard{background:var(--bg);border:1px solid var(--bor);border-left:3px solid var(--gn);border-radius:6px;padding:12px;margin-bottom:8px}
+.pname{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
+.pcoord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-bottom:8px}
+.pbtns{display:flex;gap:6px;flex-wrap:wrap}
+.pbtn{background:transparent;border:1px solid var(--bor);border-radius:4px;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:5px 11px;cursor:pointer;-webkit-appearance:none;transition:all .2s}
+.pbtn:hover{border-color:var(--ac);color:var(--ac)}
+.pbtn.del{border-color:rgba(255,68,68,.4);color:#f66}
+.pbtn.del:hover{background:rgba(255,68,68,.1);border-color:#f44;color:#f44}
+/* SOURCE LINKS */
+.slink{display:flex;align-items:center;gap:8px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;padding:11px 13px;text-decoration:none;margin-bottom:7px;transition:all .2s}
+.sl-b{background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.2);color:var(--ac)}
+.sl-g{background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.2);color:var(--gn)}
+.sl-o{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.2);color:var(--or)}
+.hint{font-size:12px;color:var(--dm);line-height:1.9;text-align:center;padding:24px 0}
 /* MODAL */
-#mbg{position:fixed;inset:0;background:rgba(5,10,18,.88);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:16px}
+#mbg{position:fixed;inset:0;background:rgba(5,10,18,.9);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
 #mbg.open{display:flex}
-#modal{background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:20px;width:100%;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.mtitle{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--accent);margin-bottom:16px}
-.fg{margin-bottom:12px}
-.mbtns{display:flex;gap:8px;margin-top:16px}
-.mbt{flex:1;border-radius:4px;padding:10px;cursor:pointer;-webkit-appearance:none}
-.mbt.cn{background:transparent;border:1px solid var(--border);color:var(--dim);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600}
-.mbt.sv{background:rgba(0,255,136,.1);border:1px solid var(--green);color:var(--green);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px}
-
+#modal{background:var(--surf);border:1px solid var(--bor);border-radius:12px;padding:22px;width:100%;max-width:350px;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.mtitle{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--ac);margin-bottom:18px}
+.mbtns{display:flex;gap:8px;margin-top:18px}
+.mbt{flex:1;border-radius:5px;padding:11px;cursor:pointer;-webkit-appearance:none;font-weight:600}
+.mbt.cn{background:transparent;border:1px solid var(--bor);color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:13px}
+.mbt.sv{background:rgba(0,255,136,.1);border:1px solid var(--gn);color:var(--gn);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px}
 /* TOAST */
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--surf2);border:1px solid var(--green);border-radius:6px;padding:8px 18px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--green);z-index:1200;opacity:0;transition:all .28s;pointer-events:none;white-space:nowrap;max-width:92%}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--surf2);border:1px solid var(--gn);border-radius:6px;padding:9px 18px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gn);z-index:1200;opacity:0;transition:all .28s;pointer-events:none;white-space:nowrap;max-width:90%;text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-
 /* Leaflet overrides */
 .leaflet-container{background:#050a12 !important;font-family:'Rajdhani',sans-serif}
-.leaflet-control-zoom a{background:rgba(5,10,18,.92) !important;border:1px solid var(--border) !important;color:var(--accent) !important;width:30px !important;height:30px !important;line-height:30px !important;font-size:16px !important}
-.leaflet-control-zoom a:hover{background:var(--surf2) !important}
-.leaflet-control-attribution{background:rgba(5,10,18,.75) !important;color:var(--dim) !important;font-size:9px !important}
-.leaflet-control-attribution a{color:var(--accent) !important}
-.leaflet-popup-content-wrapper{background:var(--surf2) !important;border:1px solid var(--accent) !important;border-radius:8px !important;color:var(--text) !important;box-shadow:0 0 16px rgba(0,212,255,.3) !important}
+.leaflet-control-zoom a{background:rgba(5,10,18,.92) !important;border:1px solid var(--bor) !important;color:var(--ac) !important;width:30px !important;height:30px !important;line-height:30px !important;font-size:16px !important}
+.leaflet-control-attribution{background:rgba(5,10,18,.75) !important;color:var(--dm) !important;font-size:9px !important}
+.leaflet-control-attribution a{color:var(--ac) !important}
+.leaflet-popup-content-wrapper{background:var(--surf2) !important;border:1px solid var(--ac) !important;border-radius:8px !important;color:var(--tx) !important}
 .leaflet-popup-tip{background:var(--surf2) !important}
 .leaflet-popup-content{margin:10px 14px !important}
-.pp-name{font-family:'Orbitron',monospace;font-size:11px;color:var(--green);margin-bottom:4px}
-.pp-coord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dim)}
+.pp-name{font-family:'Orbitron',monospace;font-size:11px;color:var(--gn);margin-bottom:5px}
+.pp-coord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-bottom:8px}
+.pp-del{background:rgba(255,68,68,.1);border:1px solid #f44;border-radius:4px;color:#f55;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:4px 10px;cursor:pointer;width:100%}
 </style>
 </head>
 <body>
@@ -138,22 +126,21 @@ body{height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',s
   </div>
 
   <div id="tabs">
-    <button class="tab on" id="t-street" onclick="setLayer('street')">&#x1F5FA; Street</button>
-    <button class="tab" id="t-sat"    onclick="setLayer('sat')">&#x1F308; Voyager</button>
-    <button class="tab" id="t-topo"   onclick="setLayer('topo')">&#x26F0;&#xFE0F; Terrain</button>
-    <button class="tab" id="t-dark"   onclick="setLayer('dark')">&#x1F303; Dark</button>
-    <button class="tab" id="t-hybrid" onclick="setLayer('hybrid')">&#x1F30D; Hybrid</button>
+    <button class="tab on" id="t-street"  onclick="setLayer('street')">&#x1F5FA; Street</button>
+    <button class="tab"    id="t-voyager" onclick="setLayer('voyager')">&#x1F308; Voyager</button>
+    <button class="tab"    id="t-topo"    onclick="setLayer('topo')">&#x26F0; Terrain</button>
+    <button class="tab"    id="t-dark"    onclick="setLayer('dark')">&#x1F303; Dark</button>
+    <button class="tab"    id="t-hybrid"  onclick="setLayer('hybrid')">&#x1F30D; Hybrid</button>
   </div>
 
   <div id="mapwrap">
     <div id="map"></div>
     <div id="ch"><div class="chdot"></div></div>
     <div id="fabs">
-      <div class="fab" onclick="openD('props')">&#x1F3E0;</div>
-      <div class="fab" onclick="openD('search')">&#x1F50D;</div>
-      <div class="fab" onclick="locateMe()">&#x1F3AF;</div>
-      <div class="fab" onclick="pinCenter()">&#x1F4CD;</div>
-      <div class="fab" onclick="openD('sources')">&#x1F310;</div>
+      <div class="fab" onclick="showPanel('search')" title="Search">&#x1F50D;</div>
+      <div class="fab" onclick="pinCenter()" title="Pin map center">&#x1F4CD;</div>
+      <div class="fab" onclick="locateMe()" title="My GPS">&#x1F3AF;</div>
+      <div class="fab" onclick="showPanel('sources')" title="Live Sources">&#x1F310;</div>
     </div>
   </div>
 
@@ -164,32 +151,78 @@ body{height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',s
     <span class="sp">|</span>
     <span>Z<span class="v" id="sz">14</span></span>
     <span class="sp">|</span>
-    <span>&#x1F3E0;<span class="v" id="sp">0</span></span>
+    <span>&#x1F3E0;<span class="v" id="spc">0</span></span>
   </div>
 
   <div id="bnav">
-    <button class="bnb" onclick="openD('search')"><span class="ic">&#x1F50D;</span>SEARCH</button>
-    <button class="bnb" onclick="pinCenter()"><span class="ic">&#x1F4CD;</span>PIN</button>
-    <button class="bnb" onclick="openD('props')"><span class="ic">&#x1F3E0;</span>SITES</button>
-    <button class="bnb" onclick="openD('sources')"><span class="ic">&#x1F310;</span>SOURCES</button>
+    <button class="bnb" onclick="showPanel('search')"><span class="ic">&#x1F50D;</span>SEARCH</button>
+    <button class="bnb" onclick="pinCenter()"><span class="ic">&#x1F4CD;</span>PIN HERE</button>
+    <button class="bnb" onclick="showPanel('props')"><span class="ic">&#x1F3E0;</span>MY SITES</button>
+    <button class="bnb" onclick="showPanel('sources')"><span class="ic">&#x1F310;</span>SOURCES</button>
     <button class="bnb" onclick="locateMe()"><span class="ic">&#x1F3AF;</span>LOCATE</button>
   </div>
 </div>
 
-<div id="drawer">
-  <div class="dh"></div>
-  <div id="dbody"></div>
+<!-- SEARCH PANEL -->
+<div class="panel" id="panel-search">
+  <div class="panel-handle"></div>
+  <div class="panel-body">
+    <div class="panel-title">&#x1F50D; SEARCH LOCATION
+      <button class="panel-close" onclick="hidePanel('search')">&#x2715;</button>
+    </div>
+    <label class="flabel">Search by address / city / landmark</label>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <input class="fi" id="search-q" placeholder="e.g. Kondapur Hyderabad..." type="search" style="margin-bottom:0"
+        onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch();}">
+      <button class="ibtn" onclick="doSearch()">&#x1F50D;</button>
+    </div>
+    <div class="divider"></div>
+    <label class="flabel">Or jump to coordinates</label>
+    <div class="frow" style="margin-bottom:8px">
+      <input class="fi" id="c-lat" placeholder="Latitude" type="number" step="0.0001" style="margin-bottom:0">
+      <input class="fi" id="c-lng" placeholder="Longitude" type="number" step="0.0001" style="margin-bottom:0">
+    </div>
+    <button class="btn-primary" onclick="goCoords()">&#x25BA; GO TO COORDINATES</button>
+    <div class="divider"></div>
+    <button class="btn-green" onclick="pinCenter();hidePanel('search')">&#x1F4CD; SAVE CURRENT MAP CENTER AS SITE</button>
+  </div>
 </div>
 
+<!-- SITES PANEL -->
+<div class="panel" id="panel-props">
+  <div class="panel-handle"></div>
+  <div class="panel-body">
+    <div class="panel-title">&#x1F3E0; MY PROPERTY SITES
+      <button class="panel-close" onclick="hidePanel('props')">&#x2715;</button>
+    </div>
+    <div id="prop-list"></div>
+  </div>
+</div>
+
+<!-- SOURCES PANEL -->
+<div class="panel" id="panel-sources">
+  <div class="panel-handle"></div>
+  <div class="panel-body">
+    <div class="panel-title">&#x1F310; LIVE SATELLITE SOURCES
+      <button class="panel-close" onclick="hidePanel('sources')">&#x2715;</button>
+    </div>
+    <div style="font-size:11px;color:var(--dm);margin-bottom:14px;line-height:1.6">
+      These links open at your <b style="color:var(--ac)">current map location</b> in your browser with real satellite imagery.
+    </div>
+    <div id="src-links"></div>
+  </div>
+</div>
+
+<!-- SAVE MODAL -->
 <div id="mbg">
   <div id="modal">
     <div class="mtitle">&#x1F4CD; SAVE PROPERTY SITE</div>
-    <div class="fg"><label class="flabel">Property Name</label>
-      <input class="fi" id="mn" placeholder="My Home / Farm / Office..." type="text"></div>
-    <div class="fg"><label class="flabel">Latitude</label>
-      <input class="fi" id="mlat" readonly style="color:var(--accent);font-family:'Share Tech Mono',monospace"></div>
-    <div class="fg"><label class="flabel">Longitude</label>
-      <input class="fi" id="mlng" readonly style="color:var(--accent);font-family:'Share Tech Mono',monospace"></div>
+    <div style="margin-bottom:10px"><label class="flabel">Property Name</label>
+      <input class="fi" id="mn" placeholder="My Home / Farm / Office..." type="text" style="margin-bottom:0"></div>
+    <div style="margin-bottom:10px"><label class="flabel">Latitude</label>
+      <input class="fi" id="mlat" readonly style="color:var(--ac);font-family:'Share Tech Mono',monospace;margin-bottom:0"></div>
+    <div><label class="flabel">Longitude</label>
+      <input class="fi" id="mlng" readonly style="color:var(--ac);font-family:'Share Tech Mono',monospace;margin-bottom:0"></div>
     <div class="mbtns">
       <button class="mbt cn" onclick="closeM()">CANCEL</button>
       <button class="mbt sv" onclick="saveProp()">SAVE SITE</button>
@@ -200,279 +233,302 @@ body{height:100%;background:var(--bg);color:var(--text);font-family:'Rajdhani',s
 <div id="toast"></div>
 
 <script>
-const SK='sattrack_v5';
-let props=JSON.parse(localStorage.getItem(SK)||'[]');
-let map, curLayer='street', mkrs=[], pLL=null, dOpen=false;
+// ── STATE ──────────────────────────────────────────────────────────────────
+const SK = 'sattrack_v6';
+let props = JSON.parse(localStorage.getItem(SK) || '[]');
+let map, curLayer = 'street', mkrs = [], pLL = null;
 
-// ── TILE LAYERS: ALL OSM/CARTO family — open CORS, zero restrictions ─────────
-function makeLayers(){
-  const r=window.devicePixelRatio>1?'@2x':'';
+// ── TILE LAYERS (all OSM/CARTO — guaranteed open CORS, no restrictions) ────
+function makeLayers() {
+  const r = window.devicePixelRatio > 1 ? '@2x' : '';
   return {
-    street: L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {attribution:'&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',maxZoom:19,subdomains:'abc'}
-    ),
-    sat: L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}'+r+'.png',
-      {attribution:'&copy; <a href="https://carto.com">CARTO</a> &copy; OSM',maxZoom:20,subdomains:'abcd'}
-    ),
-    topo: L.tileLayer(
-      'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
-      {attribution:'&copy; <a href="https://www.cyclosm.org">CyclOSM</a>',maxZoom:20,subdomains:'abc'}
-    ),
-    dark: L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}'+r+'.png',
-      {attribution:'&copy; <a href="https://carto.com">CARTO</a>',maxZoom:20,subdomains:'abcd'}
-    ),
+    street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {attribution:'&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',maxZoom:19,subdomains:'abc'}),
+    voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}'+r+'.png',
+      {attribution:'&copy; CARTO &copy; OSM',maxZoom:20,subdomains:'abcd'}),
+    topo: L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
+      {attribution:'&copy; CyclOSM &copy; OSM',maxZoom:20,subdomains:'abc'}),
+    dark: L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}'+r+'.png',
+      {attribution:'&copy; CARTO',maxZoom:20,subdomains:'abcd'}),
     hybrid: L.layerGroup([
-      L.tileLayer(
-        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {attribution:'&copy; OSM',maxZoom:19,subdomains:'abc'}
-      ),
-      L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}'+r+'.png',
-        {attribution:'&copy; CARTO',maxZoom:20,subdomains:'abcd',opacity:0.9}
-      )
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        {attribution:'&copy; OSM',maxZoom:19,subdomains:'abc'}),
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}'+r+'.png',
+        {attribution:'&copy; CARTO',maxZoom:20,subdomains:'abcd',opacity:0.85})
     ])
   };
 }
+const LNAMES = {street:'OpenStreetMap',voyager:'Voyager',topo:'Terrain',dark:'Dark',hybrid:'Hybrid'};
+let layers = {};
 
-let layers={};
-const LNAMES={street:'OpenStreetMap',sat:'CartoDB Voyager',topo:'CyclOSM Terrain',dark:'Dark Mode',hybrid:'OSM+Labels'};
-
-function initMap(){
-  map=L.map('map',{
-    center:[17.385,78.486],
-    zoom:14,
-    zoomControl:true,
-    attributionControl:true,
-    preferCanvas:false,
-    tap:true,
-    tapTolerance:15
+// ── MAP INIT ───────────────────────────────────────────────────────────────
+function initMap() {
+  map = L.map('map', {
+    center:[17.385, 78.486], zoom:14,
+    zoomControl:true, attributionControl:true,
+    tap:true, tapTolerance:20
   });
-
-  layers=makeLayers();
+  layers = makeLayers();
   layers.street.addTo(map);
 
-  // Aggressive invalidateSize for iOS
-  const fix=()=>map.invalidateSize({animate:false});
-  fix();
-  setTimeout(fix,100);setTimeout(fix,300);setTimeout(fix,700);setTimeout(fix,1500);
-  window.addEventListener('resize',fix);
-  document.fonts.ready.then(fix);
+  // iOS layout fix
+  const fix = () => map.invalidateSize({animate:false});
+  [0,150,400,800,1600].forEach(t => setTimeout(fix, t));
+  window.addEventListener('resize', fix);
 
   // Long-press to pin
-  let lpt=null;
-  map.on('mousedown touchstart',e=>{
-    const ll=e.latlng;
-    lpt=setTimeout(()=>{openModal(ll.lat,ll.lng);},700);
+  let lpt = null;
+  map.on('mousedown touchstart', e => {
+    const ll = e.latlng;
+    lpt = setTimeout(() => openModal(ll.lat, ll.lng), 700);
   });
-  map.on('mouseup touchend touchcancel mousemove',()=>clearTimeout(lpt));
-  map.on('contextmenu',e=>openModal(e.latlng.lat,e.latlng.lng));
-  map.on('moveend zoomend',updSt);
+  map.on('mouseup touchend touchcancel', () => clearTimeout(lpt));
+  map.on('drag', () => clearTimeout(lpt));
+  map.on('contextmenu', e => openModal(e.latlng.lat, e.latlng.lng));
+  map.on('moveend zoomend', updSt);
   updSt();
-  props.forEach(p=>addMkr(p));
-  toast('SatTrack ready \u2014 tap SEARCH to find your property');
+
+  // Render saved pins
+  props.forEach(p => addMkr(p));
+  toast('Map ready! Tap SEARCH to find your property');
 }
 
-function setLayer(n){
-  if(layers[curLayer]){
-    try{map.removeLayer(layers[curLayer]);}catch(e){}
-  }
+// ── LAYERS ─────────────────────────────────────────────────────────────────
+function setLayer(n) {
+  try { Object.values(layers).forEach(l => map.removeLayer(l)); } catch(e){}
   layers[n].addTo(map);
-  curLayer=n;
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  curLayer = n;
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('on'));
   document.getElementById('t-'+n).classList.add('on');
-  document.getElementById('sl').textContent=LNAMES[n];
+  document.getElementById('sl').textContent = LNAMES[n];
 }
 
-function updSt(){
-  const c=map.getCenter();
-  const coord=c.lat.toFixed(4)+'\xB0, '+c.lng.toFixed(4)+'\xB0';
-  document.getElementById('sc').textContent=coord;
-  document.getElementById('sz').textContent=map.getZoom();
-  document.getElementById('sp').textContent=props.length;
+function updSt() {
+  const c = map.getCenter();
+  document.getElementById('sc').textContent = c.lat.toFixed(4)+'°, '+c.lng.toFixed(4)+'°';
+  document.getElementById('sz').textContent = map.getZoom();
+  document.getElementById('spc').textContent = props.length;
 }
 
-// ── CLOCK ──
-function tick(){
-  const n=new Date();
-  document.getElementById('clk').textContent=
-    [n.getUTCHours(),n.getUTCMinutes(),n.getUTCSeconds()]
-      .map(v=>String(v).padStart(2,'0')).join(':')+' UTC';
+// ── CLOCK ──────────────────────────────────────────────────────────────────
+function tick() {
+  const n = new Date();
+  document.getElementById('clk').textContent =
+    [n.getUTCHours(),n.getUTCMinutes(),n.getUTCSeconds()].map(v=>String(v).padStart(2,'0')).join(':') + ' UTC';
 }
-setInterval(tick,1000);tick();
+setInterval(tick, 1000); tick();
 
-// ── SEARCH ──
-async function doSearch(){
-  const q=(document.getElementById('si')||{}).value||'';
-  if(!q.trim())return;
-  toast('Searching\u2026');
-  try{
-    const r=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q.trim())+'&format=json&limit=1&accept-language=en');
-    const d=await r.json();
-    if(!d.length){toast('Location not found');return;}
-    const la=parseFloat(d[0].lat),ln=parseFloat(d[0].lon);
-    map.flyTo([la,ln],17,{duration:1.3});
-    const li=document.getElementById('li'),gi=document.getElementById('gi');
-    if(li)li.value=la.toFixed(6);
-    if(gi)gi.value=ln.toFixed(6);
-    toast('Found: '+d[0].display_name.split(',')[0]);
-  }catch(e){toast('Search failed \u2014 check connection');}
-}
+// ── PANELS ─────────────────────────────────────────────────────────────────
+let activePanel = null;
 
-function goCoords(){
-  const la=parseFloat((document.getElementById('li')||{}).value||'');
-  const ln=parseFloat((document.getElementById('gi')||{}).value||'');
-  if(isNaN(la)||isNaN(ln)){toast('Enter valid coordinates');return;}
-  map.flyTo([la,ln],17,{duration:1.3});
-  closeD();
-  toast('Navigated to '+la.toFixed(4)+'\xB0, '+ln.toFixed(4)+'\xB0');
-}
+function showPanel(name) {
+  // Hide any open panel first
+  if (activePanel && activePanel !== name) hidePanel(activePanel);
 
-function locateMe(){
-  if(!navigator.geolocation){toast('Geolocation not supported');return;}
-  toast('Locating\u2026');
-  navigator.geolocation.getCurrentPosition(p=>{
-    map.flyTo([p.coords.latitude,p.coords.longitude],18,{duration:1.4});
-    toast('Located: '+p.coords.latitude.toFixed(4)+'\xB0, '+p.coords.longitude.toFixed(4)+'\xB0');
-  },()=>toast('Location access denied'));
-}
+  if (name === 'props') renderPropList();
+  if (name === 'sources') renderSources();
 
-function pinCenter(){
-  const c=map.getCenter();
-  openModal(c.lat,c.lng);
-}
+  document.getElementById('panel-'+name).classList.add('open');
+  document.getElementById('panel-'+name).style.display = 'block';
+  activePanel = name;
 
-// ── DRAWER ──
-function todayStr(){
-  const d=new Date();
-  return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
-}
-
-function openD(panel){
-  const c=map.getCenter();
-  const lat=c.lat.toFixed(5),lng=c.lng.toFixed(5);
-  let h='';
-
-  if(panel==='search'){
-    h='<div class="dtitle">&#x1F50D; SEARCH &amp; NAVIGATE</div>'+
-      '<label class="flabel">Search Location</label>'+
-      '<div style="display:flex;gap:6px;margin-bottom:10px">'+
-      '<input class="fi" id="si" placeholder="Address, city, landmark\u2026" type="text" onkeydown="if(event.key===\'Enter\')doSearch()">'+
-      '<button class="ibtn" onclick="doSearch()">&#x1F50D;</button></div>'+
-      '<label class="flabel">Or Enter Coordinates</label>'+
-      '<div class="frow">'+
-      '<input class="fi" id="li" placeholder="Latitude" type="number" step="0.0001" value="'+lat+'">'+
-      '<input class="fi" id="gi" placeholder="Longitude" type="number" step="0.0001" value="'+lng+'">'+
-      '</div>'+
-      '<button class="gobtn" onclick="goCoords()">&#x25BA; GO TO COORDINATES</button>'+
-      '<div class="divider"></div>'+
-      '<button class="gobtn" style="border-color:var(--green);color:var(--green);background:rgba(0,255,136,.06)" onclick="pinCenter();closeD()">&#x1F4CD; SAVE CURRENT LOCATION AS SITE</button>';
-
-  }else if(panel==='props'){
-    h='<div class="dtitle">&#x1F3E0; MY PROPERTY SITES <span class="sbadge">'+props.length+'</span></div>'+
-      (props.length===0
-        ?'<div class="hint">No sites saved yet.<br>Tap SEARCH, find your property,<br>then tap PIN or long-press the map.</div>'
-        :props.map(p=>'<div class="pcard">'+
-            '<div class="pname">&#x1F3E0; '+esc(p.name)+'</div>'+
-            '<div class="pcoord">'+p.lat.toFixed(5)+'\xB0N &nbsp; '+p.lng.toFixed(5)+'\xB0E</div>'+
-            '<div class="pbtns">'+
-            '<button class="pbtn" onclick="flyP('+p.id+')">&#x1F4CD; View</button>'+
-            '<button class="pbtn" onclick="satP('+p.id+')">&#x1F6F0; Satellite</button>'+
-            '<button class="pbtn" onclick="srcP('+p.id+')">&#x1F310; Sources</button>'+
-            '<button class="pbtn del" onclick="delP('+p.id+')">&#x1F5D1;</button>'+
-            '</div></div>').join(''));
-
-  }else if(panel==='sources'){
-    h='<div class="dtitle">&#x1F310; LIVE SATELLITE SOURCES</div>'+
-      '<div style="font-size:11px;color:var(--dim);margin-bottom:12px">Opens at map center: '+lat+'\xB0, '+lng+'\xB0</div>'+
-      '<a class="slink slink-g" href="https://zoom.earth/#view='+lat+','+lng+',16z/date=today" target="_blank">&#x1F30D; Zoom Earth &mdash; Near Real-Time (every 10\u201315 min)</a>'+
-      '<a class="slink slink-b" href="https://worldview.earthdata.nasa.gov/?v='+(+lng-.3).toFixed(3)+','+(+lat-.3).toFixed(3)+','+(+lng+.3).toFixed(3)+','+(+lat+.3).toFixed(3)+'&t='+todayStr()+'" target="_blank">&#x1F4E1; NASA Worldview &mdash; MODIS Terra (daily pass)</a>'+
-      '<a class="slink slink-b" href="https://www.star.nesdis.noaa.gov/GOES/" target="_blank">&#x2601;&#xFE0F; NOAA GOES &mdash; Live geostationary</a>'+
-      '<a class="slink slink-o" href="https://apps.sentinel-hub.com/eo-browser/?zoom=16&lat='+lat+'&lng='+lng+'" target="_blank">&#x1F5FA;&#xFE0F; Sentinel Hub &mdash; Copernicus 10m resolution</a>'+
-      '<a class="slink slink-b" href="https://maps.google.com/maps?q='+lat+','+lng+'&z=19&t=k" target="_blank">&#x1F6F0; Google Earth Web &mdash; High resolution</a>'+
-      '<a class="slink slink-b" href="https://www.bing.com/maps?cp='+lat+'~'+lng+'&lvl=19&style=a" target="_blank">&#x1F4F7; Bing Maps &mdash; Bird\'s Eye / Aerial</a>';
+  if (name === 'search') {
+    setTimeout(() => {
+      const el = document.getElementById('search-q');
+      if (el) el.focus();
+    }, 350);
   }
-
-  document.getElementById('dbody').innerHTML=h;
-  document.getElementById('drawer').classList.add('open');
-  dOpen=true;
-  if(panel==='search')setTimeout(()=>{const el=document.getElementById('si');if(el)el.focus();},250);
 }
 
-function closeD(){
-  document.getElementById('drawer').classList.remove('open');
-  dOpen=false;
+function hidePanel(name) {
+  const el = document.getElementById('panel-'+name);
+  el.classList.remove('open');
+  setTimeout(() => { el.style.display = 'none'; }, 300);
+  if (activePanel === name) activePanel = null;
 }
 
-document.addEventListener('click',e=>{
-  if(dOpen&&!document.getElementById('drawer').contains(e.target)&&!document.getElementById('mbg').classList.contains('open'))closeD();
+// Close panel when tapping map
+document.addEventListener('click', e => {
+  if (!activePanel) return;
+  const panel = document.getElementById('panel-'+activePanel);
+  if (panel && !panel.contains(e.target)) {
+    // Don't close if tapping a FAB or bottom nav
+    if (e.target.closest('#fabs') || e.target.closest('#bnav')) return;
+    hidePanel(activePanel);
+  }
 });
 
-// ── MODAL ──
-function openModal(lat,lng){
-  pLL={lat,lng};
-  document.getElementById('mlat').value=lat.toFixed(6);
-  document.getElementById('mlng').value=lng.toFixed(6);
-  document.getElementById('mn').value='';
+// ── SEARCH ─────────────────────────────────────────────────────────────────
+async function doSearch() {
+  const input = document.getElementById('search-q');
+  const q = input ? input.value.trim() : '';
+  if (!q) { toast('Type a location to search'); return; }
+  toast('Searching for: ' + q);
+  try {
+    const url = 'https://nominatim.openstreetmap.org/search?q=' +
+      encodeURIComponent(q) + '&format=json&limit=1&accept-language=en';
+    const res = await fetch(url);
+    const data = await res.json();
+    if (!data || !data.length) { toast('Location not found — try another name'); return; }
+    const lat = parseFloat(data[0].lat);
+    const lng = parseFloat(data[0].lon);
+    map.flyTo([lat, lng], 17, {duration:1.3});
+    // Prefill coord inputs
+    const li = document.getElementById('c-lat');
+    const gi = document.getElementById('c-lng');
+    if(li) li.value = lat.toFixed(6);
+    if(gi) gi.value = lng.toFixed(6);
+    const name = data[0].display_name.split(',')[0];
+    toast('Found: ' + name);
+  } catch(e) {
+    toast('Search failed — check internet connection');
+  }
+}
+
+function goCoords() {
+  const la = parseFloat(document.getElementById('c-lat').value);
+  const ln = parseFloat(document.getElementById('c-lng').value);
+  if (isNaN(la) || isNaN(ln) || la < -90 || la > 90 || ln < -180 || ln > 180) {
+    toast('Enter valid coordinates'); return;
+  }
+  map.flyTo([la, ln], 17, {duration:1.3});
+  hidePanel('search');
+  toast('Jumped to ' + la.toFixed(4) + '°, ' + ln.toFixed(4) + '°');
+}
+
+function locateMe() {
+  if (!navigator.geolocation) { toast('Geolocation not supported on this device'); return; }
+  toast('Getting your GPS location...');
+  navigator.geolocation.getCurrentPosition(
+    p => {
+      map.flyTo([p.coords.latitude, p.coords.longitude], 18, {duration:1.4});
+      toast('Located: ' + p.coords.latitude.toFixed(4) + '°, ' + p.coords.longitude.toFixed(4) + '°');
+    },
+    err => {
+      if (err.code === 1) toast('Location access denied — allow in browser settings');
+      else toast('Could not get location');
+    },
+    {enableHighAccuracy:true, timeout:10000}
+  );
+}
+
+// ── PROPERTIES ─────────────────────────────────────────────────────────────
+function pinCenter() {
+  const c = map.getCenter();
+  openModal(c.lat, c.lng);
+}
+
+function openModal(lat, lng) {
+  pLL = {lat, lng};
+  document.getElementById('mlat').value = lat.toFixed(6);
+  document.getElementById('mlng').value = lng.toFixed(6);
+  document.getElementById('mn').value = '';
   document.getElementById('mbg').classList.add('open');
-  setTimeout(()=>document.getElementById('mn').focus(),120);
-}
-function closeM(){document.getElementById('mbg').classList.remove('open');}
-function saveProp(){
-  if(!pLL)return;
-  const name=document.getElementById('mn').value.trim()||'Property '+(props.length+1);
-  const p={id:Date.now(),name,lat:pLL.lat,lng:pLL.lng,saved:new Date().toISOString()};
-  props.push(p);localStorage.setItem(SK,JSON.stringify(props));
-  closeM();addMkr(p,true);
-  document.getElementById('sp').textContent=props.length;
-  toast('Saved: '+name);
+  setTimeout(() => document.getElementById('mn').focus(), 150);
 }
 
-// ── PROP ACTIONS ──
-function delP(id){
-  props=props.filter(p=>p.id!==id);localStorage.setItem(SK,JSON.stringify(props));
-  const i=mkrs.findIndex(m=>m.id===id);
-  if(i!==-1){map.removeLayer(mkrs[i].m);mkrs.splice(i,1);}
-  document.getElementById('sp').textContent=props.length;
-  openD('props');toast('Removed');
-}
-function flyP(id){
-  const p=props.find(x=>x.id===id);if(!p)return;
-  map.flyTo([p.lat,p.lng],18,{duration:1.4});closeD();
-  toast('Viewing: '+p.name);
-}
-function satP(id){
-  flyP(id);setTimeout(()=>setLayer('sat'),1500);
-}
-function srcP(id){
-  const p=props.find(x=>x.id===id);if(!p)return;
-  map.setView([p.lat,p.lng],16);closeD();
-  setTimeout(()=>openD('sources'),100);
+function closeM() {
+  document.getElementById('mbg').classList.remove('open');
 }
 
-function addMkr(p,fly=false){
-  const icon=L.divIcon({
-    html:'<div style="width:26px;height:26px;background:rgba(0,255,136,.15);border:2px solid #00ff88;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(0,255,136,.5)"><span style="transform:rotate(45deg);font-size:12px">&#x1F3E0;</span></div>',
-    className:'',iconSize:[26,26],iconAnchor:[13,26],popupAnchor:[0,-28]
+function saveProp() {
+  if (!pLL) return;
+  const name = document.getElementById('mn').value.trim() || ('Site ' + (props.length + 1));
+  const p = {id: Date.now(), name, lat: pLL.lat, lng: pLL.lng, saved: new Date().toISOString()};
+  props.push(p);
+  localStorage.setItem(SK, JSON.stringify(props));
+  closeM();
+  addMkr(p, true);
+  document.getElementById('spc').textContent = props.length;
+  toast('✅ Saved: ' + name);
+}
+
+// DELETE a property — called from popup and from sites panel
+function deletePin(id) {
+  props = props.filter(p => p.id !== id);
+  localStorage.setItem(SK, JSON.stringify(props));
+  // Remove marker from map
+  const idx = mkrs.findIndex(m => m.id === id);
+  if (idx !== -1) {
+    map.removeLayer(mkrs[idx].mk);
+    mkrs.splice(idx, 1);
+  }
+  document.getElementById('spc').textContent = props.length;
+  // Refresh panel if open
+  if (activePanel === 'props') renderPropList();
+  toast('🗑️ Pin deleted');
+}
+
+function flyToPin(id) {
+  const p = props.find(x => x.id === id);
+  if (p) { map.flyTo([p.lat, p.lng], 18, {duration:1.3}); hidePanel('props'); }
+}
+
+function addMkr(p, fly=false) {
+  const icon = L.divIcon({
+    html: '<div style="width:26px;height:26px;background:rgba(0,255,136,.18);border:2px solid #00ff88;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(0,255,136,.5)"><span style="transform:rotate(45deg);font-size:12px">&#x1F3E0;</span></div>',
+    className:'', iconSize:[26,26], iconAnchor:[13,26], popupAnchor:[0,-28]
   });
-  const mk=L.marker([p.lat,p.lng],{icon})
-    .bindPopup('<div class="pp-name">&#x1F3E0; '+esc(p.name)+'</div><div class="pp-coord">'+p.lat.toFixed(6)+'&#xB0;<br>'+p.lng.toFixed(6)+'&#xB0;</div>')
+  const mk = L.marker([p.lat, p.lng], {icon})
+    .bindPopup(
+      '<div class="pp-name">&#x1F3E0; ' + esc(p.name) + '</div>' +
+      '<div class="pp-coord">' + p.lat.toFixed(5) + '°<br>' + p.lng.toFixed(5) + '°</div>' +
+      '<button class="pp-del" onclick="deletePin(' + p.id + ');this.closest(\'.leaflet-popup\').remove()">&#x1F5D1; Delete this pin</button>'
+    )
     .addTo(map);
-  mkrs.push({id:p.id,m:mk});
-  if(fly){map.flyTo([p.lat,p.lng],18,{duration:1.2});mk.openPopup();}
+  mkrs.push({id: p.id, mk});
+  if (fly) { map.flyTo([p.lat, p.lng], 18, {duration:1.2}); mk.openPopup(); }
 }
 
-function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-
-// ── TOAST ──
-function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2800);
+// ── RENDER SITES PANEL ─────────────────────────────────────────────────────
+function renderPropList() {
+  const el = document.getElementById('prop-list');
+  if (!props.length) {
+    el.innerHTML = '<div class="hint">No sites saved yet.<br>Tap <b style="color:var(--ac)">PIN HERE</b> to save the current map center,<br>or <b style="color:var(--ac)">long-press</b> any spot on the map.</div>';
+    return;
+  }
+  el.innerHTML = props.map(p =>
+    '<div class="pcard">' +
+    '<div class="pname">&#x1F3E0; ' + esc(p.name) + '</div>' +
+    '<div class="pcoord">' + p.lat.toFixed(5) + '° N &nbsp; ' + p.lng.toFixed(5) + '° E</div>' +
+    '<div class="pbtns">' +
+    '<button class="pbtn" onclick="flyToPin('+p.id+')">&#x1F4CD; View on Map</button>' +
+    '<button class="pbtn" onclick="flyToPin('+p.id+');setTimeout(()=>showPanel(\'sources\'),1200)">&#x1F310; Satellite Sources</button>' +
+    '<button class="pbtn del" onclick="if(confirm(\'Delete '+esc(p.name)+'?\'))deletePin('+p.id+')">&#x1F5D1; Delete</button>' +
+    '</div></div>'
+  ).join('');
 }
 
-window.addEventListener('load',initMap);
+// ── RENDER SOURCES PANEL ────────────────────────────────────────────────────
+function renderSources() {
+  const c = map.getCenter();
+  const lat = c.lat.toFixed(5), lng = c.lng.toFixed(5);
+  const d = new Date();
+  const ds = d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
+  const b = 0.3;
+  document.getElementById('src-links').innerHTML =
+    '<div style="font-family:\'Share Tech Mono\',monospace;font-size:10px;color:var(--ac);margin-bottom:12px;padding:6px 10px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:5px">&#x1F4CD; '+lat+'°N, '+lng+'°E</div>' +
+    '<a class="slink sl-g" href="https://zoom.earth/#view='+lat+','+lng+',17z/date=today" target="_blank">&#x1F30D; Zoom Earth &mdash; Near Real-Time (10&ndash;15 min update)</a>' +
+    '<a class="slink sl-b" href="https://worldview.earthdata.nasa.gov/?v='+(+lng-b).toFixed(3)+','+(+lat-b).toFixed(3)+','+(+lng+b).toFixed(3)+','+(+lat+b).toFixed(3)+'&t='+ds+'" target="_blank">&#x1F4E1; NASA Worldview &mdash; MODIS Terra (daily satellite pass)</a>' +
+    '<a class="slink sl-b" href="https://www.star.nesdis.noaa.gov/GOES/" target="_blank">&#x2601;&#xFE0F; NOAA GOES &mdash; Live geostationary weather sat</a>' +
+    '<a class="slink sl-o" href="https://apps.sentinel-hub.com/eo-browser/?zoom=17&lat='+lat+'&lng='+lng+'" target="_blank">&#x1F5FA; Sentinel Hub &mdash; Copernicus 10m resolution</a>' +
+    '<a class="slink sl-b" href="https://maps.google.com/maps?q='+lat+','+lng+'&z=19&t=k" target="_blank">&#x1F6F0; Google Earth Web &mdash; High-res satellite</a>' +
+    '<a class="slink sl-b" href="https://www.bing.com/maps?cp='+lat+'~'+lng+'&lvl=19&style=a" target="_blank">&#x1F4F7; Bing Maps &mdash; Aerial / Bird\'s Eye</a>' +
+    '<div style="font-size:10px;color:var(--dm);margin-top:12px;line-height:1.7">&#x26A0;&#xFE0F; <b>Zoom Earth</b> gives the most recent satellite view (near real-time). Google Earth and Bing show highest ground resolution. All open in your browser.</div>';
+}
+
+// ── UTILS ──────────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+window.addEventListener('load', initMap);
 </script>
 </body>
 </html>
