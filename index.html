@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <style>
-:root{--bg:#050a12;--surf:#0a1525;--surf2:#0f1e35;--bor:#1a3a5c;--ac:#00d4ff;--gn:#00ff88;--or:#ff6b35;--tx:#c8dff0;--dm:#4a7a9b}
+:root{--bg:#050a12;--surf:#0a1525;--surf2:#0f1e35;--bor:#1a3a5c;--ac:#00d4ff;--gn:#00ff88;--or:#ff6b35;--tx:#c8dff0;--dm:#4a7a9b;--gold:#e8c96a}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif}
 #app{display:flex;flex-direction:column;height:100vh;height:100dvh}
@@ -25,10 +25,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 .ldot{width:6px;height:6px;background:var(--gn);border-radius:50%;animation:blink 1.2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 #clk{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-left:6px}
-#tabs{flex-shrink:0;background:var(--surf);border-bottom:1px solid var(--bor);display:flex;gap:2px;padding:5px 8px;overflow-x:auto;scrollbar-width:none}
-#tabs::-webkit-scrollbar{display:none}
-.tab{background:transparent;border:1px solid transparent;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;border-radius:4px;cursor:pointer;white-space:nowrap;transition:all .2s}
-.tab.on{background:rgba(0,212,255,.1);border-color:var(--ac);color:var(--ac)}
+
 #mapwrap{position:relative;flex:1;min-height:0}
 #map{position:absolute;inset:0;width:100%;height:100%}
 #ch{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:400;width:34px;height:34px}
@@ -36,180 +33,169 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 #ch::before{top:50%;left:0;right:0;height:1px;transform:translateY(-50%)}
 #ch::after{left:50%;top:0;bottom:0;width:1px;transform:translateX(-50%)}
 .chdot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:5px;height:5px;background:var(--ac);border-radius:50%;box-shadow:0 0 6px var(--ac)}
-
-/* SATELLITE LAUNCH BAR — the hero feature */
-#satbar{position:absolute;bottom:0;left:0;right:0;z-index:500;background:linear-gradient(0deg,rgba(5,10,18,.97) 60%,transparent);padding:10px 10px 12px;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
-#satbar::-webkit-scrollbar{display:none}
-.satbtn{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(10,21,37,.92);border-radius:10px;padding:10px 12px;cursor:pointer;text-decoration:none;transition:all .2s;min-width:80px;border:1px solid var(--bor)}
-.satbtn:hover,.satbtn:active{transform:translateY(-2px)}
-.satbtn.primary{border-color:var(--gn);background:rgba(0,255,136,.08)}
-.satbtn.primary:hover{background:rgba(0,255,136,.15);box-shadow:0 0 14px rgba(0,255,136,.3)}
-.satbtn.blue{border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.06)}
-.satbtn.blue:hover{background:rgba(0,212,255,.14);box-shadow:0 0 14px rgba(0,212,255,.25)}
-.satbtn.orange{border-color:rgba(255,107,53,.4);background:rgba(255,107,53,.06)}
-.satbtn.orange:hover{background:rgba(255,107,53,.14)}
-.satbtn-icon{font-size:22px;line-height:1}
-.satbtn-label{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:var(--tx);text-align:center;letter-spacing:.3px}
-.satbtn-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--dm);text-align:center}
-.satbtn.primary .satbtn-label{color:var(--gn)}
-.satbtn.primary .satbtn-sub{color:rgba(0,255,136,.5)}
-.satbtn.blue .satbtn-label{color:var(--ac)}
-.satbtn.blue .satbtn-sub{color:rgba(0,212,255,.5)}
-.satbtn.orange .satbtn-label{color:var(--or)}
-
-/* FABs top right */
-#fabs{position:absolute;right:10px;top:10px;z-index:600;display:flex;flex-direction:column;gap:6px}
-.fab{width:40px;height:40px;background:rgba(5,10,18,.92);border:1px solid var(--bor);border-radius:8px;color:var(--ac);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;box-shadow:0 4px 14px rgba(0,0,0,.6);transition:all .2s}
+#fabs{position:absolute;right:10px;top:10px;z-index:600;display:flex;flex-direction:column;gap:7px}
+.fab{width:44px;height:44px;background:rgba(5,10,18,.92);border:1px solid var(--bor);border-radius:10px;color:var(--ac);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;box-shadow:0 4px 14px rgba(0,0,0,.6);transition:all .2s;flex-direction:column;gap:2px}
 .fab:hover,.fab.on{border-color:var(--ac);box-shadow:0 0 10px rgba(0,212,255,.3)}
+.fab.gold-fab{border-color:rgba(232,201,106,.4);background:rgba(232,201,106,.08)}
+.fab-label{font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3px;color:var(--dm);line-height:1}
 
-#sb{flex-shrink:0;background:var(--surf);border-top:1px solid var(--bor);padding:5px 10px;display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);overflow:hidden}
+/* SAT BAR — 3 big buttons */
+#satbar{position:absolute;bottom:0;left:0;right:0;z-index:500;background:linear-gradient(0deg,rgba(5,10,18,.98) 55%,transparent);padding:10px 10px 14px;display:flex;gap:8px}
+.satbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;border-radius:12px;padding:12px 8px;cursor:pointer;text-decoration:none;transition:all .15s;border:1px solid}
+.satbtn:active{transform:scale(.96)}
+.satbtn.zoom{border-color:rgba(0,255,136,.5);background:rgba(0,255,136,.09)}
+.satbtn.google{border-color:rgba(0,212,255,.4);background:rgba(0,212,255,.08)}
+.satbtn.bing{border-color:rgba(180,100,255,.4);background:rgba(180,100,255,.08)}
+.satbtn-icon{font-size:26px;line-height:1}
+.satbtn-name{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;text-align:center}
+.satbtn-sub{font-family:'Share Tech Mono',monospace;font-size:9px;text-align:center}
+.satbtn.zoom .satbtn-name{color:var(--gn)}
+.satbtn.zoom .satbtn-sub{color:rgba(0,255,136,.55)}
+.satbtn.google .satbtn-name{color:var(--ac)}
+.satbtn.google .satbtn-sub{color:rgba(0,212,255,.55)}
+.satbtn.bing .satbtn-name{color:#c084ff}
+.satbtn.bing .satbtn-sub{color:rgba(180,100,255,.55)}
+
+#sb{flex-shrink:0;background:var(--surf);border-top:1px solid var(--bor);padding:5px 10px;display:flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm)}
 #sb .v{color:var(--ac)}
-.sp{color:var(--bor)}
-#bnav{flex-shrink:0;background:var(--surf);border-top:1px solid var(--bor);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
-.bnb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:600;padding:5px 0;cursor:pointer}
-.bnb:hover,.bnb.on{color:var(--ac)}
-.bnb .ic{font-size:18px;line-height:1.2}
+.spsep{color:var(--bor)}
 
 /* PANELS */
-.panel{position:fixed;bottom:0;left:0;right:0;max-height:82%;background:var(--surf);border-top:1px solid var(--bor);border-radius:14px 14px 0 0;z-index:800;transform:translateY(100%);transition:transform .28s ease;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:none}
+.panel{position:fixed;bottom:0;left:0;right:0;max-height:78%;background:var(--surf);border-top:1px solid var(--bor);border-radius:16px 16px 0 0;z-index:900;transform:translateY(100%);transition:transform .28s ease;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:none}
 .panel.open{transform:translateY(0);display:block}
 .ph{width:36px;height:4px;background:var(--bor);border-radius:2px;margin:10px auto 0}
-.pb{padding:12px 16px 40px}
+.pb{padding:12px 16px 36px}
 .ptitle{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--ac);margin:12px 0 14px;display:flex;align-items:center;justify-content:space-between}
-.pclose{background:transparent;border:1px solid var(--bor);border-radius:4px;color:var(--dm);font-size:14px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* INPUTS */
-.fi{width:100%;background:var(--bg);border:1px solid var(--bor);border-radius:5px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;margin-bottom:8px}
+.pclose{background:transparent;border:1px solid var(--bor);border-radius:4px;color:var(--dm);width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.fi{width:100%;background:var(--bg);border:1px solid var(--bor);border-radius:6px;color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;margin-bottom:10px;box-sizing:border-box}
 .fi:focus{border-color:var(--ac)}
 .fi::placeholder{color:var(--dm)}
-.flabel{font-size:10px;color:var(--dm);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;display:block}
-.frow{display:flex;gap:6px}
+.flabel{font-size:10px;color:var(--dm);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;display:block}
+.frow{display:flex;gap:8px}
 .frow .fi{flex:1;margin-bottom:0}
-.ibtn{background:var(--surf2);border:1px solid var(--bor);border-radius:5px;color:var(--ac);cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.btnp{width:100%;margin-top:10px;background:rgba(0,212,255,.08);border:1px solid var(--ac);border-radius:6px;color:var(--ac);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:11px;cursor:pointer;-webkit-appearance:none}
+.btnp{width:100%;margin-top:8px;background:rgba(0,212,255,.08);border:1px solid var(--ac);border-radius:6px;color:var(--ac);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:11px;cursor:pointer;-webkit-appearance:none}
 .btng{width:100%;margin-top:8px;background:rgba(0,255,136,.08);border:1px solid var(--gn);border-radius:6px;color:var(--gn);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:11px;cursor:pointer;-webkit-appearance:none}
 .divider{height:1px;background:var(--bor);margin:14px 0;opacity:.4}
 
-/* PROPERTY CARDS */
-.pcard{background:var(--bg);border:1px solid var(--bor);border-left:3px solid var(--gn);border-radius:6px;padding:12px;margin-bottom:8px}
-.pname{font-size:14px;font-weight:600;color:var(--tx);margin-bottom:4px}
-.pcoord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-bottom:8px}
-.pbtns{display:flex;gap:6px;flex-wrap:wrap}
-.pbtn{background:transparent;border:1px solid var(--bor);border-radius:4px;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:5px 11px;cursor:pointer;-webkit-appearance:none;transition:all .2s}
-.pbtn:hover{border-color:var(--ac);color:var(--ac)}
-.pbtn.del{border-color:rgba(255,68,68,.4);color:#f77}
-.pbtn.del:hover{background:rgba(255,68,68,.1);border-color:#f44;color:#f44}
-.hint{font-size:12px;color:var(--dm);line-height:1.9;text-align:center;padding:24px 0}
+/* MAPBOX SETUP PANEL */
+.mb-step{background:var(--bg);border:1px solid var(--bor);border-radius:8px;padding:14px;margin-bottom:10px}
+.mb-step-num{font-family:'Orbitron',monospace;font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:6px}
+.mb-step-text{font-size:12px;color:var(--dm);line-height:1.7}
+.mb-step-text a{color:var(--ac);text-decoration:none}
+.mb-step-text b{color:var(--tx)}
+.mb-current{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gn);margin-top:6px}
+.btn-gold{width:100%;margin-top:10px;background:linear-gradient(135deg,rgba(232,201,106,.2),rgba(232,201,106,.08));border:1px solid var(--gold);border-radius:6px;color:var(--gold);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;padding:12px;cursor:pointer;-webkit-appearance:none}
 
-/* MODAL */
-#mbg{position:fixed;inset:0;background:rgba(5,10,18,.9);backdrop-filter:blur(6px);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+/* SITE CARDS */
+.scard{background:var(--bg);border:1px solid var(--bor);border-left:3px solid var(--gn);border-radius:8px;padding:13px;margin-bottom:8px}
+.scard-name{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:2px}
+.scard-note{font-size:12px;color:var(--or);margin-bottom:4px;font-style:italic}
+.scard-coord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-bottom:10px}
+.scard-btns{display:flex;gap:6px;flex-wrap:wrap}
+.sbtn{background:transparent;border:1px solid var(--bor);border-radius:5px;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;padding:6px 10px;cursor:pointer;-webkit-appearance:none;transition:all .2s}
+.sbtn.view{border-color:rgba(0,255,136,.4);color:var(--gn);background:rgba(0,255,136,.06)}
+.sbtn.sat{border-color:rgba(0,212,255,.3);color:var(--ac);background:rgba(0,212,255,.05)}
+.sbtn.del{border-color:rgba(255,68,68,.3);color:#f77}
+.hint{text-align:center;color:var(--dm);font-size:12px;padding:24px 0;line-height:1.9}
+
+/* SAVE MODAL */
+#mbg{position:fixed;inset:0;background:rgba(5,10,18,.9);backdrop-filter:blur(6px);z-index:1100;display:none;align-items:flex-end;justify-content:center}
 #mbg.open{display:flex}
-#modal{background:var(--surf);border:1px solid var(--bor);border-radius:12px;padding:22px;width:100%;max-width:350px;box-shadow:0 20px 60px rgba(0,0,0,.7)}
-.mtitle{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--ac);margin-bottom:18px}
-.mbtns{display:flex;gap:8px;margin-top:18px}
-.mbt{flex:1;border-radius:5px;padding:11px;cursor:pointer;-webkit-appearance:none;font-weight:600}
+#modal{background:var(--surf);border:1px solid var(--bor);border-radius:16px 16px 0 0;padding:20px 18px 36px;width:100%;max-width:500px;box-shadow:0 -8px 32px rgba(0,0,0,.5)}
+.modal-handle{width:36px;height:4px;background:var(--bor);border-radius:2px;margin:0 auto 16px}
+.mtitle{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--ac);margin-bottom:16px}
+.pin-preview{display:flex;align-items:center;gap:12px;background:rgba(0,255,136,.06);border:1px solid rgba(0,255,136,.25);border-radius:10px;padding:12px 14px;margin-bottom:16px}
+.pin-preview-icon{font-size:32px;animation:bounce .8s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.pin-preview-title{font-size:13px;font-weight:700;color:var(--gn);margin-bottom:2px}
+.pin-preview-coord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm)}
+.mbtns{display:flex;gap:8px;margin-top:16px}
+.mbt{flex:1;border-radius:6px;padding:11px;cursor:pointer;-webkit-appearance:none;font-weight:600}
 .mbt.cn{background:transparent;border:1px solid var(--bor);color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:13px}
-.mbt.sv{background:rgba(0,255,136,.1);border:1px solid var(--gn);color:var(--gn);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px}
+.mbt.sv{background:rgba(0,255,136,.12);border:1px solid var(--gn);color:var(--gn);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px}
 
-#toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-10px);background:var(--surf2);border:1px solid var(--gn);border-radius:6px;padding:9px 18px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gn);z-index:1200;opacity:0;transition:all .28s;pointer-events:none;white-space:nowrap;max-width:90%;text-align:center}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast{position:fixed;top:66px;left:14px;right:14px;background:var(--surf2);border:1px solid var(--gn);border-radius:8px;padding:10px 16px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--gn);z-index:1200;opacity:0;transition:all .25s;pointer-events:none;text-align:center;box-sizing:border-box}
+#toast.show{opacity:1}
 
-/* Leaflet */
-.leaflet-container{background:#0d1b2a !important}
-.leaflet-control-zoom a{background:rgba(5,10,18,.92) !important;border:1px solid var(--bor) !important;color:var(--ac) !important;width:30px !important;height:30px !important;line-height:30px !important}
+/* MARKERS */
+.mkr-wrap{display:flex;flex-direction:column;align-items:center}
+.mkr-pin{width:36px;height:36px;background:rgba(0,255,136,.2);border:3px solid #00ff88;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(0,255,136,.6),0 4px 12px rgba(0,0,0,.5)}
+.mkr-pin span{transform:rotate(45deg);font-size:16px;line-height:1}
+.mkr-label{background:rgba(5,10,18,.92);border:1px solid #00ff88;border-radius:4px;color:#00ff88;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;padding:3px 8px;margin-top:4px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.mkr-note{background:rgba(255,107,53,.15);border:1px solid rgba(255,107,53,.5);border-radius:4px;color:var(--or);font-family:'Rajdhani',sans-serif;font-size:10px;padding:2px 7px;margin-top:2px;white-space:nowrap;max-width:130px;overflow:hidden;text-overflow:ellipsis}
+
+.leaflet-container{background:#0a1525 !important}
+.leaflet-control-zoom a{background:rgba(5,10,18,.92) !important;border:1px solid var(--bor) !important;color:var(--ac) !important;width:32px !important;height:32px !important;line-height:32px !important}
 .leaflet-control-attribution{background:rgba(5,10,18,.75) !important;color:var(--dm) !important;font-size:9px !important}
 .leaflet-control-attribution a{color:var(--ac) !important}
-.leaflet-popup-content-wrapper{background:var(--surf2) !important;border:1px solid var(--ac) !important;border-radius:8px !important;color:var(--tx) !important}
+.leaflet-popup-content-wrapper{background:var(--surf2) !important;border:1px solid var(--ac) !important;border-radius:10px !important;color:var(--tx) !important}
 .leaflet-popup-tip{background:var(--surf2) !important}
-.leaflet-popup-content{margin:10px 14px !important}
-.pp-name{font-family:'Orbitron',monospace;font-size:11px;color:var(--gn);margin-bottom:5px}
-.pp-coord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-bottom:8px}
-.pp-del{background:rgba(255,68,68,.1);border:1px solid #f44;border-radius:4px;color:#f55;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;width:100%}
+.leaflet-popup-content{margin:12px 16px !important}
+.pp-name{font-family:'Orbitron',monospace;font-size:12px;color:var(--gn);margin-bottom:4px}
+.pp-note{font-size:12px;color:var(--or);font-style:italic;margin-bottom:6px}
+.pp-coord{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--dm);margin-bottom:10px}
+.pp-btns{display:flex;gap:6px;flex-wrap:wrap}
+.pp-btn{background:transparent;border:1px solid var(--bor);border-radius:4px;color:var(--dm);font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer}
+.pp-btn.del{border-color:rgba(255,68,68,.4);color:#f77}
+.pp-btn.g{border-color:rgba(0,255,136,.4);color:var(--gn)}
+.pp-btn.b{border-color:rgba(0,212,255,.35);color:var(--ac)}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="hdr">
     <div class="logo">
-      <div class="lico">&#x1F6F0;&#xFE0F;</div>
+      <div class="lico">🛰️</div>
       <div><div class="lname">SATTRACK</div><div class="lsub">LIVE PROPERTY MONITOR</div></div>
     </div>
     <div style="display:flex;align-items:center">
       <div class="live"><div class="ldot"></div>LIVE</div>
-      <div id="clk">--:--:-- UTC</div>
+      <div id="clk"></div>
     </div>
   </div>
 
-  <div id="tabs">
-    <button class="tab on" id="t-carto"   onclick="setLayer('carto')">&#x1F30F; Street</button>
-    <button class="tab"    id="t-dark"    onclick="setLayer('dark')">&#x1F303; Dark</button>
-    <button class="tab"    id="t-topo"    onclick="setLayer('topo')">&#x26F0; Terrain</button>
-    <button class="tab"    id="t-osm"     onclick="setLayer('osm')">&#x1F5FA; OSM Classic</button>
-    <button class="tab"    id="t-hybrid"  onclick="setLayer('hybrid')">&#x1F30D; Hybrid</button>
-  </div>
+
 
   <div id="mapwrap">
     <div id="map"></div>
     <div id="ch"><div class="chdot"></div></div>
 
-    <!-- SATELLITE LAUNCH BAR — always visible at bottom of map -->
-    <div id="satbar">
-      <a class="satbtn primary" id="btn-zoom" href="#" target="_blank" onclick="return openSat('zoom')">
-        <div class="satbtn-icon">&#x1F30D;</div>
-        <div class="satbtn-label">Zoom Earth</div>
-        <div class="satbtn-sub">10–15 min live</div>
-      </a>
-      <a class="satbtn blue" id="btn-google" href="#" target="_blank" onclick="return openSat('google')">
-        <div class="satbtn-icon">&#x1F6F0;</div>
-        <div class="satbtn-label">Google Earth</div>
-        <div class="satbtn-sub">Highest res</div>
-      </a>
-      <a class="satbtn blue" id="btn-nasa" href="#" target="_blank" onclick="return openSat('nasa')">
-        <div class="satbtn-icon">&#x1F4E1;</div>
-        <div class="satbtn-label">NASA MODIS</div>
-        <div class="satbtn-sub">Daily pass</div>
-      </a>
-      <a class="satbtn orange" id="btn-sentinel" href="#" target="_blank" onclick="return openSat('sentinel')">
-        <div class="satbtn-icon">&#x1F5FA;&#xFE0F;</div>
-        <div class="satbtn-label">Sentinel Hub</div>
-        <div class="satbtn-sub">10m / 5-day</div>
-      </a>
-      <a class="satbtn blue" id="btn-bing" href="#" target="_blank" onclick="return openSat('bing')">
-        <div class="satbtn-icon">&#x1F4F7;</div>
-        <div class="satbtn-label">Bing Aerial</div>
-        <div class="satbtn-sub">Bird's eye</div>
-      </a>
-      <a class="satbtn blue" id="btn-noaa" href="#" target="_blank" onclick="return openSat('noaa')">
-        <div class="satbtn-icon">&#x2601;&#xFE0F;</div>
-        <div class="satbtn-label">NOAA GOES</div>
-        <div class="satbtn-sub">Live weather</div>
-      </a>
+    <div id="fabs">
+      <div class="fab" onclick="showPanel('search')">🔍<div class="fab-label">SEARCH</div></div>
+      <div class="fab" onclick="pinCenter()">📍<div class="fab-label">PIN</div></div>
+      <div class="fab" onclick="locateMe()">🎯<div class="fab-label">GPS</div></div>
+      <div class="fab" onclick="showPanel('sites')">🏠<div class="fab-label">SITES</div></div>
+      <div class="fab gold-fab" onclick="showPanel('mapbox')">🔑<div class="fab-label">SAT KEY</div></div>
     </div>
 
-    <div id="fabs">
-      <div class="fab" onclick="showPanel('search')" title="Search">&#x1F50D;</div>
-      <div class="fab" onclick="pinCenter()" title="Pin center">&#x1F4CD;</div>
-      <div class="fab" onclick="locateMe()" title="My GPS">&#x1F3AF;</div>
-      <div class="fab" onclick="showPanel('props')" title="My Sites">&#x1F3E0;</div>
+    <!-- 3 SATELLITE LAUNCH BUTTONS -->
+    <div id="satbar">
+      <a class="satbtn zoom" id="lnk-zoom" href="#" onclick="openSat('zoom');return false;">
+        <div class="satbtn-icon">🌍</div>
+        <div class="satbtn-name">Zoom Earth</div>
+        <div class="satbtn-sub">10–15 min live</div>
+      </a>
+      <a class="satbtn google" id="lnk-google" href="#" onclick="openSat('google');return false;">
+        <div class="satbtn-icon">🛰️</div>
+        <div class="satbtn-name">Google Earth</div>
+        <div class="satbtn-sub">Highest res</div>
+      </a>
+      <a class="satbtn bing" id="lnk-bing" href="#" onclick="openSat('bing');return false;">
+        <div class="satbtn-icon">📷</div>
+        <div class="satbtn-name">Bing Aerial</div>
+        <div class="satbtn-sub">Bird's eye</div>
+      </a>
     </div>
   </div>
 
   <div id="sb">
-    <span class="v" id="sl">Street</span>
-    <span class="sp">|</span>
+    <span class="v" id="sl">🗺️ OpenStreetMap</span>
+    <span class="spsep">|</span>
     <span class="v" id="sc">--</span>
-    <span class="sp">|</span>
-    <span>Z<span class="v" id="sz">14</span></span>
-    <span class="sp">|</span>
-    <span>&#x1F3E0;<span class="v" id="spc">0</span></span>
-  </div>
-
-  <div id="bnav">
-    <button class="bnb" onclick="showPanel('search')"><span class="ic">&#x1F50D;</span>SEARCH</button>
-    <button class="bnb" onclick="pinCenter()"><span class="ic">&#x1F4CD;</span>PIN</button>
-    <button class="bnb" onclick="showPanel('props')"><span class="ic">&#x1F3E0;</span>MY SITES</button>
-    <button class="bnb" onclick="locateMe()"><span class="ic">&#x1F3AF;</span>LOCATE</button>
-    <button class="bnb" onclick="openSat('zoom')"><span class="ic">&#x1F30D;</span>SAT VIEW</button>
+    <span class="spsep">|</span>
+    <span>Z<span class="v" id="sz">--</span></span>
+    <span class="spsep">|</span>
+    <span>🏠<span class="v" id="spc">0</span></span>
   </div>
 </div>
 
@@ -217,57 +203,116 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 <div class="panel" id="panel-search">
   <div class="ph"></div>
   <div class="pb">
-    <div class="ptitle">&#x1F50D; SEARCH LOCATION
-      <button class="pclose" onclick="hidePanel('search')">&#x2715;</button>
-    </div>
-    <label class="flabel">Search by address / city / landmark</label>
-    <div style="display:flex;gap:6px;margin-bottom:10px">
-      <input class="fi" id="search-q" placeholder="e.g. Kondapur Hyderabad..." type="search" style="margin-bottom:0"
+    <div class="ptitle">🔍 SEARCH LOCATION <button class="pclose" onclick="hidePanel('search')">✕</button></div>
+    <label class="flabel">Search address or area</label>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <input class="fi" id="sq" placeholder="e.g. Nanakramguda Hyderabad..." style="margin-bottom:0"
         onkeydown="if(event.key==='Enter'){event.preventDefault();doSearch();}">
-      <button class="ibtn" onclick="doSearch()">&#x1F50D;</button>
+      <button style="background:rgba(0,212,255,.12);border:1px solid var(--ac);border-radius:6px;color:var(--ac);font-size:18px;width:44px;flex-shrink:0;cursor:pointer" onclick="doSearch()">🔍</button>
     </div>
     <div class="divider"></div>
     <label class="flabel">Or jump to coordinates</label>
-    <div class="frow" style="margin-bottom:8px">
-      <input class="fi" id="c-lat" placeholder="Latitude" type="number" step="0.0001" style="margin-bottom:0">
-      <input class="fi" id="c-lng" placeholder="Longitude" type="number" step="0.0001" style="margin-bottom:0">
+    <div class="frow" style="margin-bottom:10px">
+      <input class="fi" id="clat" placeholder="Latitude e.g. 17.4245" type="number" step="0.0001" style="margin-bottom:0">
+      <input class="fi" id="clng" placeholder="Longitude e.g. 78.3476" type="number" step="0.0001" style="margin-bottom:0">
     </div>
-    <button class="btnp" onclick="goCoords()">&#x25BA; GO TO COORDINATES</button>
+    <button class="btnp" onclick="goCoords()">▶ GO TO COORDINATES</button>
     <div class="divider"></div>
-    <button class="btng" onclick="pinCenter();hidePanel('search')">&#x1F4CD; SAVE CURRENT MAP CENTER AS SITE</button>
+    <button class="btng" onclick="pinCenter();hidePanel('search')">📍 PIN CURRENT MAP CENTER</button>
   </div>
 </div>
 
 <!-- SITES PANEL -->
-<div class="panel" id="panel-props">
+<div class="panel" id="panel-sites">
   <div class="ph"></div>
   <div class="pb">
-    <div class="ptitle">&#x1F3E0; MY PROPERTY SITES
-      <button class="pclose" onclick="hidePanel('props')">&#x2715;</button>
+    <div class="ptitle">🏠 MY PROPERTY SITES <button class="pclose" onclick="hidePanel('sites')">✕</button></div>
+    <div id="sites-list"></div>
+  </div>
+</div>
+
+<!-- MAPBOX KEY FULLSCREEN OVERLAY -->
+<div id="mb-overlay" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2000;overflow-y:auto;-webkit-overflow-scrolling:touch">
+  <div style="background:var(--surf);border-bottom:1px solid var(--bor);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10">
+    <div style="font-family:'Orbitron',monospace;font-size:12px;color:var(--gold);letter-spacing:1px">🔑 SATELLITE KEY SETUP</div>
+    <button onclick="hideMBOverlay()" style="background:transparent;border:1px solid var(--bor);border-radius:6px;color:var(--dm);font-size:18px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+
+  <div style="padding:16px">
+    <!-- STATUS BOX -->
+    <div id="mb-status-box" style="border-radius:10px;padding:14px;margin-bottom:16px;border:1px solid"></div>
+
+    <!-- WHY -->
+    <div style="background:rgba(232,201,106,.07);border:1px solid rgba(232,201,106,.25);border-radius:10px;padding:14px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--gold);margin-bottom:8px">Why add a Mapbox key?</div>
+      <div style="font-size:12px;color:var(--dm);line-height:1.8">
+        ✅ Satellite imagery <b style="color:var(--tx)">3–12 months old</b> (vs 8 years without key)<br>
+        ✅ <b style="color:var(--tx)">30cm resolution</b> — see your house clearly<br>
+        ✅ <b style="color:var(--tx)">Free 50,000</b> tile loads/month<br>
+        ✅ Works on Vercel, GitHub Pages — any domain
+      </div>
     </div>
-    <div id="prop-list"></div>
+
+    <!-- STEPS -->
+    <div style="font-size:10px;color:var(--gold);letter-spacing:2px;margin-bottom:10px;font-family:'Orbitron',monospace">HOW TO GET YOUR FREE KEY</div>
+
+    <div style="background:var(--surf);border:1px solid var(--bor);border-radius:8px;padding:13px;margin-bottom:8px">
+      <div style="font-size:10px;color:var(--ac);letter-spacing:1px;font-family:'Share Tech Mono',monospace;margin-bottom:5px">STEP 1</div>
+      <div style="font-size:13px;color:var(--tx);line-height:1.6">Open <b>mapbox.com</b> in Safari and create a <b>free account</b></div>
+      <button onclick="window.open('https://account.mapbox.com/auth/signup/','_blank')" style="width:100%;margin-top:10px;background:rgba(0,212,255,.1);border:1px solid var(--ac);border-radius:6px;color:var(--ac);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;padding:10px;cursor:pointer">
+        Open Mapbox Sign Up ↗
+      </button>
+    </div>
+
+    <div style="background:var(--surf);border:1px solid var(--bor);border-radius:8px;padding:13px;margin-bottom:8px">
+      <div style="font-size:10px;color:var(--ac);letter-spacing:1px;font-family:'Share Tech Mono',monospace;margin-bottom:5px">STEP 2</div>
+      <div style="font-size:13px;color:var(--tx);line-height:1.6">After login → go to <b>Account → Access Tokens</b> → copy your <b>Default public token</b></div>
+      <div style="margin-top:8px;background:var(--bg);border-radius:6px;padding:8px 12px;font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--ac)">
+        It starts with: pk.eyJ1IjoiY...
+      </div>
+      <button onclick="window.open('https://account.mapbox.com/access-tokens/','_blank')" style="width:100%;margin-top:10px;background:rgba(0,212,255,.1);border:1px solid var(--ac);border-radius:6px;color:var(--ac);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;padding:10px;cursor:pointer">
+        Open Mapbox Tokens Page ↗
+      </button>
+    </div>
+
+    <div style="background:var(--surf);border:1px solid var(--bor);border-radius:8px;padding:13px;margin-bottom:16px">
+      <div style="font-size:10px;color:var(--ac);letter-spacing:1px;font-family:'Share Tech Mono',monospace;margin-bottom:5px">STEP 3</div>
+      <div style="font-size:13px;color:var(--tx);margin-bottom:10px;line-height:1.6">Paste your token here and tap <b style="color:var(--gn)">Save & Load Satellite</b></div>
+      <input id="mb-token-input"
+        placeholder="Paste token here: pk.eyJ1IjoiY..."
+        type="text"
+        style="width:100%;background:var(--bg);border:2px solid var(--gold);border-radius:8px;color:var(--gold);font-family:'Share Tech Mono',monospace;font-size:13px;padding:12px 14px;outline:none;box-sizing:border-box;-webkit-appearance:none;margin-bottom:10px">
+      <button onclick="saveMapboxKey()" style="width:100%;background:linear-gradient(135deg,rgba(232,201,106,.25),rgba(232,201,106,.1));border:2px solid var(--gold);border-radius:8px;color:var(--gold);font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;padding:13px;cursor:pointer">
+        🔑 SAVE & LOAD SATELLITE
+      </button>
+    </div>
+
+    <!-- REMOVE KEY -->
+    <button onclick="clearMapboxKey()" style="width:100%;background:transparent;border:1px solid rgba(255,68,68,.25);border-radius:8px;color:#f77;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;padding:11px;cursor:pointer">
+      🗑️ Remove Key (revert to street map)
+    </button>
   </div>
 </div>
 
 <!-- SAVE MODAL -->
 <div id="mbg">
   <div id="modal">
-    <div class="mtitle">&#x1F4CD; SAVE PROPERTY SITE</div>
-    <div style="margin-bottom:10px">
-      <label class="flabel">Property Name</label>
-      <input class="fi" id="mn" placeholder="My Home / Farm / Office..." type="text" style="margin-bottom:0">
+    <div class="modal-handle"></div>
+    <div class="mtitle">📍 SAVE PROPERTY SITE</div>
+    <div class="pin-preview">
+      <div class="pin-preview-icon">📍</div>
+      <div>
+        <div class="pin-preview-title">PIN LOCATION</div>
+        <div class="pin-preview-coord" id="modal-coord">--°N, --°E</div>
+      </div>
     </div>
-    <div style="margin-bottom:10px">
-      <label class="flabel">Latitude</label>
-      <input class="fi" id="mlat" readonly style="color:var(--ac);font-family:'Share Tech Mono',monospace;margin-bottom:0">
-    </div>
-    <div>
-      <label class="flabel">Longitude</label>
-      <input class="fi" id="mlng" readonly style="color:var(--ac);font-family:'Share Tech Mono',monospace;margin-bottom:0">
-    </div>
+    <label class="flabel">Property Name *</label>
+    <input class="fi" id="mn" placeholder="My Home / Farm / Plot No.42..." type="text">
+    <label class="flabel">Note / Description</label>
+    <input class="fi" id="mnote" placeholder="e.g. 2BHK, Tower B, 3rd floor..." type="text">
     <div class="mbtns">
       <button class="mbt cn" onclick="closeM()">CANCEL</button>
-      <button class="mbt sv" onclick="saveProp()">SAVE SITE</button>
+      <button class="mbt sv" onclick="saveSite()">SAVE SITE</button>
     </div>
   </div>
 </div>
@@ -275,268 +320,343 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(
 <div id="toast"></div>
 
 <script>
-const SK='sattrack_v7';
-let props=JSON.parse(localStorage.getItem(SK)||'[]');
-let map, curLayer='carto', mkrs=[], pLL=null, activePanel=null;
+const SK = 'sattrack_v11';
+const MBK = 'mapbox_key_v1';
+let sites = JSON.parse(localStorage.getItem(SK)||'[]');
+let map, mkrs=[], pLL=null, activePanel=null;
 
-// ── TILES: all CartoDB/OSM — zero CORS restrictions ───────────────────────
-function makeLayers(){
-  const r=window.devicePixelRatio>1?'@2x':'';
-  return {
-    // CartoDB Voyager — clean, familiar Google Maps-like street style
-    carto: L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}'+r+'.png',
-      {attribution:'&copy; <a href="https://carto.com">CARTO</a> &copy; <a href="https://openstreetmap.org">OSM</a>',
-       maxZoom:20,subdomains:'abcd'}
-    ),
-    // CartoDB Dark Matter
-    dark: L.tileLayer(
-      'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}'+r+'.png',
-      {attribution:'&copy; CARTO',maxZoom:20,subdomains:'abcd'}
-    ),
-    // CyclOSM — terrain/elevation
-    topo: L.tileLayer(
-      'https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png',
-      {attribution:'&copy; CyclOSM &copy; OSM',maxZoom:20,subdomains:'abc'}
-    ),
-    // OSM standard
-    osm: L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {attribution:'&copy; <a href="https://openstreetmap.org">OpenStreetMap</a>',maxZoom:19,subdomains:'abc'}
-    ),
-    // CartoDB Voyager + CartoDB labels only on top
-    hybrid: L.layerGroup([
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}'+r+'.png',
-        {attribution:'&copy; CARTO',maxZoom:20,subdomains:'abcd'}),
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}'+r+'.png',
-        {attribution:'&copy; CARTO',maxZoom:20,subdomains:'abcd',opacity:0.95})
-    ])
-  };
+// ── GET MAPBOX KEY ────────────────────────────────────────────────────────
+function getMBKey(){ return (localStorage.getItem(MBK)||'').trim(); }
+
+// ── BUILD ACTIVE TILE LAYER ──────────────────────────────────────────────
+// Mapbox satellite if key set, else CartoDB Voyager (clean street map)
+function buildActiveLayer(){
+  const r = window.devicePixelRatio>1?'@2x':'';
+  const mbKey = getMBKey();
+  if(mbKey){
+    return L.tileLayer(
+      `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/{z}/{x}/{y}${r}?access_token=${mbKey}`,
+      {attribution:'© <a href="https://mapbox.com">Mapbox</a>',maxZoom:22,tileSize:512,zoomOffset:-1});
+  }
+  // OSM — guaranteed to work from ANY domain, no API key, no CORS issues
+  return L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',maxZoom:19,subdomains:'abc'});
 }
-const LNAMES={carto:'Street (CartoDB)',dark:'Dark Mode',topo:'Terrain',osm:'OSM Classic',hybrid:'Hybrid'};
-let layers={};
 
 // ── MAP INIT ──────────────────────────────────────────────────────────────
 function initMap(){
-  map=L.map('map',{center:[17.385,78.486],zoom:14,zoomControl:true,tap:true,tapTolerance:20});
-  layers=makeLayers();
-  layers.carto.addTo(map);
+  map = L.map('map',{center:[17.4245,78.3476],zoom:17,zoomControl:true,tap:true,tapTolerance:20});
+  let activeLayer = buildActiveLayer();
+  activeLayer.addTo(map);
+
   const fix=()=>map.invalidateSize({animate:false});
   [0,150,400,900].forEach(t=>setTimeout(fix,t));
   window.addEventListener('resize',fix);
-  // Long press
+
   let lpt=null;
-  map.on('mousedown touchstart',e=>{const ll=e.latlng;lpt=setTimeout(()=>openModal(ll.lat,ll.lng),700);});
+  map.on('mousedown touchstart',e=>{const ll=e.latlng;lpt=setTimeout(()=>openModal(ll.lat,ll.lng),650);});
   map.on('mouseup touchend touchcancel drag',()=>clearTimeout(lpt));
   map.on('contextmenu',e=>openModal(e.latlng.lat,e.latlng.lng));
-  map.on('moveend zoomend',()=>{updSt();updateSatBar();});
-  updSt(); updateSatBar();
-  props.forEach(p=>addMkr(p));
-  toast('&#x1F4CD; Search your property, then tap the satellite buttons below the map');
+  map.on('moveend zoomend',()=>{updSt();updateSatLinks();});
+  updSt();updateSatLinks();
+  sites.forEach(s=>addMarker(s));
+
+  const hasMB = !!getMBKey();
+  document.getElementById('sl').textContent = hasMB ? '🛰️ Mapbox Satellite' : '🗺️ OpenStreetMap';
+  if(!hasMB){
+    toast('🗺️ Map ready! Tap 🔑 SAT KEY to add Mapbox for satellite imagery');
+  } else {
+    toast('🛰️ Mapbox satellite active — long-press map to pin a property');
+  }
+  updateMapboxStatus();
 }
 
-function setLayer(n){
-  try{Object.values(layers).forEach(l=>map.removeLayer(l));}catch(e){}
-  layers[n].addTo(map);curLayer=n;
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-  document.getElementById('t-'+n).classList.add('on');
-  document.getElementById('sl').textContent=LNAMES[n];
-}
+// ── LAYERS ────────────────────────────────────────────────────────────────
 
+
+// ── STATUS ────────────────────────────────────────────────────────────────
 function updSt(){
   const c=map.getCenter();
   document.getElementById('sc').textContent=c.lat.toFixed(4)+'°, '+c.lng.toFixed(4)+'°';
   document.getElementById('sz').textContent=map.getZoom();
-  document.getElementById('spc').textContent=props.length;
+  document.getElementById('spc').textContent=sites.length;
 }
 
-// ── SATELLITE BAR ─────────────────────────────────────────────────────────
-// Always shows buttons for current map center — tap opens in Safari
+// ── SAT LINKS — open at current map center ────────────────────────────────
 function getSatUrls(){
   const c=map.getCenter();
-  const lat=c.lat.toFixed(5),lng=c.lng.toFixed(5);
-  const z=Math.min(map.getZoom(),17);
-  const d=new Date();
-  const ds=d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0');
-  const b=0.25;
+  const lat=c.lat.toFixed(5),lng=c.lng.toFixed(5),z=Math.min(map.getZoom(),18);
   return {
-    zoom:    'https://zoom.earth/#view='+lat+','+lng+','+z+'z/date=today',
-    google:  'https://maps.google.com/maps?q='+lat+','+lng+'&z=19&t=k',
-    nasa:    'https://worldview.earthdata.nasa.gov/?v='+(+lng-b).toFixed(3)+','+(+lat-b).toFixed(3)+','+(+lng+b).toFixed(3)+','+(+lat+b).toFixed(3)+'&t='+ds,
-    sentinel:'https://apps.sentinel-hub.com/eo-browser/?zoom='+z+'&lat='+lat+'&lng='+lng,
-    bing:    'https://www.bing.com/maps?cp='+lat+'~'+lng+'&lvl=19&style=a',
-    noaa:    'https://www.star.nesdis.noaa.gov/GOES/'
+    zoom:   `https://zoom.earth/#view=${lat},${lng},${z}z/date=today`,
+    google: `https://maps.google.com/maps?q=${lat},${lng}&z=20&t=k`,
+    bing:   `https://www.bing.com/maps?cp=${lat}~${lng}&lvl=20&style=a`,
   };
 }
-
-function updateSatBar(){
-  const urls=getSatUrls();
-  Object.keys(urls).forEach(k=>{
-    const el=document.getElementById('btn-'+k);
-    if(el) el.href=urls[k];
-  });
+function updateSatLinks(){
+  const u=getSatUrls();
+  ['zoom','google','bing'].forEach(k=>{ const el=document.getElementById('lnk-'+k); if(el) el.href=u[k]; });
 }
-
 function openSat(key){
-  const urls=getSatUrls();
-  if(urls[key]) window.open(urls[key],'_blank');
-  return false;
+  window.open(getSatUrls()[key],'_blank');
 }
 
 // ── CLOCK ─────────────────────────────────────────────────────────────────
 function tick(){
   const n=new Date();
   document.getElementById('clk').textContent=
-    [n.getUTCHours(),n.getUTCMinutes(),n.getUTCSeconds()].map(v=>String(v).padStart(2,'0')).join(':')+' UTC';
+    ' '+[n.getUTCHours(),n.getUTCMinutes(),n.getUTCSeconds()].map(v=>String(v).padStart(2,'0')).join(':')+' UTC';
 }
 setInterval(tick,1000);tick();
 
 // ── PANELS ────────────────────────────────────────────────────────────────
 function showPanel(name){
   if(activePanel&&activePanel!==name)hidePanel(activePanel);
-  if(name==='props')renderPropList();
+  if(name==='sites')renderSites();
+  if(name==='mapbox'){showMBOverlay();return;}
   const el=document.getElementById('panel-'+name);
+  if(!el){ console.error('Panel not found:',name); return; }
   el.style.display='block';
-  requestAnimationFrame(()=>el.classList.add('open'));
+  el.style.transform='translateY(0)'; // Force show immediately on iOS
+  el.classList.add('open');
   activePanel=name;
-  if(name==='search')setTimeout(()=>{const e=document.getElementById('search-q');if(e)e.focus();},350);
+  if(name==='search')setTimeout(()=>{const e=document.getElementById('sq');if(e)e.focus();},320);
+  if(name==='mapbox')setTimeout(()=>{const e=document.getElementById('mb-token-input');if(e)e.focus();},320);
 }
-
 function hidePanel(name){
   const el=document.getElementById('panel-'+name);
+  if(!el)return;
   el.classList.remove('open');
   setTimeout(()=>{el.style.display='none';},300);
   if(activePanel===name)activePanel=null;
 }
-
 document.addEventListener('click',e=>{
   if(!activePanel)return;
-  const panel=document.getElementById('panel-'+activePanel);
-  if(panel&&!panel.contains(e.target)&&!e.target.closest('#fabs')&&!e.target.closest('#bnav')&&!e.target.closest('#satbar'))
-    hidePanel(activePanel);
+  const p=document.getElementById('panel-'+activePanel);
+  if(p&&!p.contains(e.target)&&!e.target.closest('#fabs'))hidePanel(activePanel);
 });
+
+// ── MAPBOX KEY MANAGEMENT ─────────────────────────────────────────────────
+function showMBOverlay(){
+  const overlay = document.getElementById('mb-overlay');
+  overlay.style.display = 'block';
+  // Update status box
+  const k = getMBKey();
+  const box = document.getElementById('mb-status-box');
+  if(k){
+    box.style.background = 'rgba(0,255,136,.07)';
+    box.style.borderColor = 'rgba(0,255,136,.3)';
+    box.innerHTML = '<div style="font-size:12px;font-weight:700;color:var(--gn);margin-bottom:4px">✅ Mapbox key is active</div>' +
+      '<div style="font-family:Share Tech Mono,monospace;font-size:11px;color:var(--dm)">' + k.substring(0,32) + '...</div>';
+    document.getElementById('mb-token-input').value = k;
+  } else {
+    box.style.background = 'rgba(255,107,53,.07)';
+    box.style.borderColor = 'rgba(255,107,53,.3)';
+    box.innerHTML = '<div style="font-size:12px;font-weight:700;color:var(--or);margin-bottom:4px">⚠️ No key set</div>' +
+      '<div style="font-size:11px;color:var(--dm)">Currently showing street map. Follow steps below to get fresh satellite imagery.</div>';
+    document.getElementById('mb-token-input').value = '';
+  }
+  setTimeout(()=>document.getElementById('mb-token-input').focus(), 300);
+}
+
+function hideMBOverlay(){
+  document.getElementById('mb-overlay').style.display = 'none';
+}
+
+function updateMapboxStatus(){
+  const k=getMBKey();
+  const el=document.getElementById('mb-current-status');
+  const inp=document.getElementById('mb-token-input');
+  if(el){
+    el.textContent=k?`✅ Active: ${k.substring(0,28)}...`:'⚠️ No key set — satellite tab shows street map';
+    el.style.color=k?'var(--gn)':'var(--or)';
+  }
+  if(inp&&k) inp.value=k;
+}
+
+function saveMapboxKey(){
+  const val=(document.getElementById('mb-token-input').value||'').trim();
+  if(!val){toast('⚠️ Paste your Mapbox token first');return;}
+  if(!val.startsWith('pk.')){toast('⚠️ Token must start with pk. — copy it from mapbox.com → Tokens');return;}
+  localStorage.setItem(MBK,val);
+  updateMapboxStatus();
+  toast('✅ Mapbox key saved! Reloading satellite layer...');
+  setTimeout(()=>{
+    // Rebuild layers with new key and switch to sat
+    try{ map.eachLayer(l=>{ if(l._url||l._layers) map.removeLayer(l); }); }catch(e){}
+    activeLayer = buildActiveLayer();
+    activeLayer.addTo(map);
+    document.getElementById('sl').textContent='🛰️ Mapbox Satellite';
+    hideMBOverlay();
+    toast('🛰️ Mapbox satellite imagery loaded!');
+  },800);
+}
+
+function clearMapboxKey(){
+  if(!confirm('Remove Mapbox key? Map will show street map instead.'))return;
+  localStorage.removeItem(MBK);
+  document.getElementById('mb-token-input').value='';
+  hideMBOverlay();
+  toast('Key removed — reloading...');
+  setTimeout(()=>location.reload(),1000);
+}
 
 // ── SEARCH ────────────────────────────────────────────────────────────────
 async function doSearch(){
-  const input=document.getElementById('search-q');
-  const q=input?input.value.trim():'';
-  if(!q){toast('Type a location first');return;}
-  toast('Searching: '+q);
-  try{
-    const res=await fetch('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(q)+'&format=json&limit=1&accept-language=en');
-    const data=await res.json();
-    if(!data||!data.length){toast('Not found — try a different name');return;}
-    const lat=parseFloat(data[0].lat),lng=parseFloat(data[0].lon);
-    map.flyTo([lat,lng],17,{duration:1.3});
-    const li=document.getElementById('c-lat'),gi=document.getElementById('c-lng');
-    if(li)li.value=lat.toFixed(6);
-    if(gi)gi.value=lng.toFixed(6);
-    setTimeout(updateSatBar,1400);
-    toast('Found: '+data[0].display_name.split(',')[0]);
-  }catch(e){toast('Search failed — check connection');}
+  const q=(document.getElementById('sq').value||'').trim();
+  if(!q){toast('Enter a location');return;}
+  toast('Searching...');
+  const apis=[
+    ()=>fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1&lat=17.385&lon=78.486`)
+      .then(r=>r.json()).then(d=>{if(!d.features?.length)throw 0;const f=d.features[0];return{lat:f.geometry.coordinates[1],lng:f.geometry.coordinates[0]};}),
+    ()=>fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1&countrycodes=in`)
+      .then(r=>r.json()).then(d=>{if(!d?.length)throw 0;return{lat:+d[0].lat,lng:+d[0].lon};}),
+  ];
+  for(const api of apis){
+    try{
+      const r=await api();
+      map.flyTo([r.lat,r.lng],18,{duration:1.3});
+      setTimeout(updateSatLinks,1400);
+      hidePanel('search');
+      toast('✅ Found: '+q.split(',')[0]);
+      return;
+    }catch(e){}
+  }
+  toast('Not found — try entering coordinates directly');
 }
 
 function goCoords(){
-  const la=parseFloat(document.getElementById('c-lat').value);
-  const ln=parseFloat(document.getElementById('c-lng').value);
-  if(isNaN(la)||isNaN(ln)){toast('Enter valid lat/lng');return;}
-  map.flyTo([la,ln],17,{duration:1.3});
+  const la=parseFloat(document.getElementById('clat').value);
+  const ln=parseFloat(document.getElementById('clng').value);
+  if(isNaN(la)||isNaN(ln)){toast('Enter valid coordinates');return;}
+  map.flyTo([la,ln],18,{duration:1.2});
   hidePanel('search');
-  setTimeout(updateSatBar,1400);
+  setTimeout(updateSatLinks,1400);
   toast('Jumped to '+la.toFixed(4)+'°, '+ln.toFixed(4)+'°');
 }
 
 function locateMe(){
-  if(!navigator.geolocation){toast('Geolocation not supported');return;}
+  if(!navigator.geolocation){toast('GPS not available');return;}
   toast('Getting GPS...');
   navigator.geolocation.getCurrentPosition(
     p=>{map.flyTo([p.coords.latitude,p.coords.longitude],18,{duration:1.4});
-        setTimeout(updateSatBar,1500);
-        toast('Located: '+p.coords.latitude.toFixed(4)+'°, '+p.coords.longitude.toFixed(4)+'°');},
-    err=>{toast(err.code===1?'Location access denied':'Could not get location');}
+        setTimeout(updateSatLinks,1500);
+        toast('✅ Located: '+p.coords.latitude.toFixed(4)+'°, '+p.coords.longitude.toFixed(4)+'°');},
+    ()=>toast('GPS denied — search or enter coordinates')
   );
 }
 
-// ── PROPERTIES ────────────────────────────────────────────────────────────
-function pinCenter(){
-  const c=map.getCenter();openModal(c.lat,c.lng);
-}
-
+// ── PIN / MODAL ───────────────────────────────────────────────────────────
+function pinCenter(){const c=map.getCenter();openModal(c.lat,c.lng);}
 function openModal(lat,lng){
   pLL={lat,lng};
-  document.getElementById('mlat').value=lat.toFixed(6);
-  document.getElementById('mlng').value=lng.toFixed(6);
+  document.getElementById('modal-coord').textContent=lat.toFixed(5)+'°N, '+lng.toFixed(5)+'°E';
   document.getElementById('mn').value='';
+  document.getElementById('mnote').value='';
   document.getElementById('mbg').classList.add('open');
   setTimeout(()=>document.getElementById('mn').focus(),150);
 }
 function closeM(){document.getElementById('mbg').classList.remove('open');}
 
-function saveProp(){
+function saveSite(){
   if(!pLL)return;
-  const name=document.getElementById('mn').value.trim()||('Site '+(props.length+1));
-  const p={id:Date.now(),name,lat:pLL.lat,lng:pLL.lng,saved:new Date().toISOString()};
-  props.push(p);localStorage.setItem(SK,JSON.stringify(props));
-  closeM();addMkr(p,true);
-  document.getElementById('spc').textContent=props.length;
-  toast('Saved: '+name);
+  const name=document.getElementById('mn').value.trim();
+  if(!name){toast('Enter property name');return;}
+  const note=document.getElementById('mnote').value.trim();
+  const s={id:Date.now(),name,note,lat:pLL.lat,lng:pLL.lng,saved:new Date().toISOString()};
+  sites.push(s);
+  localStorage.setItem(SK,JSON.stringify(sites));
+  closeM();addMarker(s,true);
+  document.getElementById('spc').textContent=sites.length;
+  toast('✅ Saved: '+name);
+}
+
+// ── MARKERS ───────────────────────────────────────────────────────────────
+function addMarker(s,fly=false){
+  const noteHtml=s.note?`<div class="mkr-note">📝 ${esc(s.note)}</div>`:'';
+  const icon=L.divIcon({
+    html:`<div class="mkr-wrap">
+      <div class="mkr-pin"><span>🏠</span></div>
+      <div class="mkr-label">${esc(s.name)}</div>
+      ${noteHtml}
+    </div>`,
+    className:'',iconSize:[140,72],iconAnchor:[18,36],popupAnchor:[52,-36]
+  });
+  const mk=L.marker([s.lat,s.lng],{icon})
+    .bindPopup(`
+      <div class="pp-name">🏠 ${esc(s.name)}</div>
+      ${s.note?`<div class="pp-note">📝 ${esc(s.note)}</div>`:''}
+      <div class="pp-coord">${s.lat.toFixed(5)}°N<br>${s.lng.toFixed(5)}°E</div>
+      <div class="pp-btns">
+        <button class="pp-btn g" onclick="openSatForSite(${s.lat},${s.lng},'zoom')">🌍 Zoom Earth</button>
+        <button class="pp-btn b" onclick="openSatForSite(${s.lat},${s.lng},'google')">🛰️ Google</button>
+        <button class="pp-btn b" onclick="openSatForSite(${s.lat},${s.lng},'bing')">📷 Bing</button>
+        <button class="pp-btn del" onclick="deletePin(${s.id})">🗑️ Delete</button>
+      </div>`)
+    .addTo(map);
+  mkrs.push({id:s.id,mk});
+  if(fly){map.flyTo([s.lat,s.lng],18,{duration:1.2});setTimeout(()=>mk.openPopup(),1300);}
+}
+
+function openSatForSite(lat,lng,key){
+  const u={
+    zoom:`https://zoom.earth/#view=${lat.toFixed(5)},${lng.toFixed(5)},18z/date=today`,
+    google:`https://maps.google.com/maps?q=${lat.toFixed(5)},${lng.toFixed(5)}&z=20&t=k`,
+    bing:`https://www.bing.com/maps?cp=${lat.toFixed(5)}~${lng.toFixed(5)}&lvl=20&style=a`,
+  };
+  map.closePopup();
+  window.open(u[key],'_blank');
 }
 
 function deletePin(id){
-  props=props.filter(p=>p.id!==id);
-  localStorage.setItem(SK,JSON.stringify(props));
+  sites=sites.filter(s=>s.id!==id);
+  localStorage.setItem(SK,JSON.stringify(sites));
   const i=mkrs.findIndex(m=>m.id===id);
   if(i!==-1){map.removeLayer(mkrs[i].mk);mkrs.splice(i,1);}
-  document.getElementById('spc').textContent=props.length;
-  if(activePanel==='props')renderPropList();
+  document.getElementById('spc').textContent=sites.length;
   map.closePopup();
-  toast('Pin deleted');
+  if(activePanel==='sites')renderSites();
+  toast('🗑️ Pin deleted');
 }
 
-function flyToPin(id){
-  const p=props.find(x=>x.id===id);
-  if(p){map.flyTo([p.lat,p.lng],18,{duration:1.3});hidePanel('props');setTimeout(updateSatBar,1500);}
-}
-
-function addMkr(p,fly=false){
-  const icon=L.divIcon({
-    html:'<div style="width:26px;height:26px;background:rgba(0,255,136,.18);border:2px solid #00ff88;border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(0,255,136,.5)"><span style="transform:rotate(45deg);font-size:12px">&#x1F3E0;</span></div>',
-    className:'',iconSize:[26,26],iconAnchor:[13,26],popupAnchor:[0,-28]
-  });
-  const mk=L.marker([p.lat,p.lng],{icon})
-    .bindPopup(
-      '<div class="pp-name">&#x1F3E0; '+esc(p.name)+'</div>'+
-      '<div class="pp-coord">'+p.lat.toFixed(5)+'°N<br>'+p.lng.toFixed(5)+'°E</div>'+
-      '<button class="pp-del" onclick="deletePin('+p.id+')">&#x1F5D1; Delete this pin</button>'
-    ).addTo(map);
-  mkrs.push({id:p.id,mk});
-  if(fly){map.flyTo([p.lat,p.lng],18,{duration:1.2});mk.openPopup();}
-}
-
-function renderPropList(){
-  const el=document.getElementById('prop-list');
-  if(!props.length){
-    el.innerHTML='<div class="hint">No sites saved yet.<br>Tap <b style="color:var(--ac)">PIN</b> to save the current map center,<br>or <b style="color:var(--ac)">long-press</b> any spot on the map.</div>';
+// ── SITES PANEL ───────────────────────────────────────────────────────────
+function renderSites(){
+  const el=document.getElementById('sites-list');
+  if(!sites.length){
+    el.innerHTML='<div class="hint">No sites saved yet.<br>Long-press the map or tap 📍 PIN to save a property.</div>';
     return;
   }
-  el.innerHTML=props.map(p=>
-    '<div class="pcard">'+
-    '<div class="pname">&#x1F3E0; '+esc(p.name)+'</div>'+
-    '<div class="pcoord">'+p.lat.toFixed(5)+'° N &nbsp;'+p.lng.toFixed(5)+'° E</div>'+
-    '<div class="pbtns">'+
-    '<button class="pbtn" onclick="flyToPin('+p.id+')">&#x1F4CD; View</button>'+
-    '<button class="pbtn" onclick="flyToPin('+p.id+');setTimeout(()=>openSat(\'zoom\'),1500)">&#x1F30D; Zoom Earth</button>'+
-    '<button class="pbtn" onclick="flyToPin('+p.id+');setTimeout(()=>openSat(\'google\'),1500)">&#x1F6F0; Google Sat</button>'+
-    '<button class="pbtn del" onclick="if(confirm(\'Delete '+esc(p.name)+'?\'))deletePin('+p.id+')">&#x1F5D1; Delete</button>'+
-    '</div></div>'
-  ).join('');
+  el.innerHTML=sites.map(s=>`
+    <div class="scard">
+      <div class="scard-name">🏠 ${esc(s.name)}</div>
+      ${s.note?`<div class="scard-note">📝 ${esc(s.note)}</div>`:''}
+      <div class="scard-coord">${s.lat.toFixed(5)}°N &nbsp; ${s.lng.toFixed(5)}°E</div>
+      <div class="scard-btns">
+        <button class="sbtn view" onclick="flyTo(${s.id})">📍 View</button>
+        <button class="sbtn sat" onclick="flyThenSat(${s.id},'zoom')">🌍 Zoom</button>
+        <button class="sbtn sat" onclick="flyThenSat(${s.id},'google')">🛰️ Google</button>
+        <button class="sbtn sat" onclick="flyThenSat(${s.id},'bing')">📷 Bing</button>
+        <button class="sbtn del" onclick="if(confirm('Delete?'))deletePin(${s.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function flyTo(id){
+  const s=sites.find(x=>x.id===id);if(!s)return;
+  map.flyTo([s.lat,s.lng],18,{duration:1.3});hidePanel('sites');
+  setTimeout(()=>{const mk=mkrs.find(m=>m.id===id);if(mk)mk.mk.openPopup();},1500);
+  setTimeout(updateSatLinks,1400);
+}
+function flyThenSat(id,key){
+  const s=sites.find(x=>x.id===id);if(!s)return;
+  openSatForSite(s.lat,s.lng,key);hidePanel('sites');
 }
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 
 function toast(msg){
-  const t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3000);
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3500);
 }
 
 window.addEventListener('load',initMap);
